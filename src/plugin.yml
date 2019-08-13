@@ -1,0 +1,23 @@
+name: Atharion
+version: 1.0.0
+description: Custom plugin for Andagor's server called Atharion https://www.twitch.tv/andagor
+main: fr.fingarde.atharion.Main
+commands:
+  s:
+    description: Summon a player on you
+  setrank:
+      description: Change rank of a player
+  nick:
+    description: Change nickname of a player
+  prefix:
+    description: Change prefix of a player
+  suffix:
+      description: Change suffix of a player
+  fly:
+    description: Allow player fly
+  kick:
+    description: Kick player
+  gamemode:
+    aliases:
+      - gm
+    description: Change gamemode
