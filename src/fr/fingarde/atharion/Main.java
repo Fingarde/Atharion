@@ -105,11 +105,17 @@ public class Main extends JavaPlugin
 
     private void registerCommands()
     {
+        getCommand("gamemode").setExecutor(new GamemodeCommand());
+        getCommand("gamemode").setTabCompleter(new GamemodeCommand());
+
+        getCommand("fly").setExecutor(new FlyCommand());
+        getCommand("fly").setTabCompleter(new FlyCommand());
+
         getCommand("s").setExecutor(new SummonPlayer());
         getCommand("setrank").setExecutor(new SetRank());
         getCommand("nick").setExecutor(new Nick());
         getCommand("prefix").setExecutor(new Prefix());
-        getCommand("fly").setExecutor(new Fly());
+
         getCommand("kick").setExecutor(new Kick());
     }
 
