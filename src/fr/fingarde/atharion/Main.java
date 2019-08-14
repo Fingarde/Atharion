@@ -11,11 +11,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+
+/*TODO
+ BAN = TP DANS
+ Prem pour parler
+ Warps
+ Ban in DB + WARNS
+
+
+ */
 
 public class Main extends JavaPlugin
 {
@@ -35,7 +44,6 @@ public class Main extends JavaPlugin
         registerListeners();
 
         restorePlayers();
-
     }
 
     private void connectDatabase()
@@ -110,7 +118,6 @@ public class Main extends JavaPlugin
         getServer().getPluginManager().registerEvents(new ConnectionListerner(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(), this);
-
     }
 
     private void restorePlayers()

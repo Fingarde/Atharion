@@ -1,6 +1,7 @@
 package fr.fingarde.atharion.commands;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,72 +14,69 @@ public class Gamemode implements CommandExecutor
     {
         if(!(sender instanceof Player))
         {
-            sender.sendMessage("§7[§bKick§7] §cCette commande est uniquement utilisable par des joueurs.");
+            sender.sendMessage("§7[§bGamemode§7] §cCette commande est uniquement utilisable par des joueurs.");
             return false;
-        }
+		}
 
         Player player = (Player) sender;
 
-
-
         if(args.length  == 0)
         {
-            sender.sendMessage("§7[§bKick§7] §cVous devez spécifier un nom correct.");
+            sender.sendMessage("§7[§bGamemode§7] §cVous devez spécifier un gamemode correct.");
             return false;
         }
 
-        if(!player.hasPermission("atharion.kick"))
+        if(!player.hasPermission("atharion.gamemode") && !player.hasPermission("atharion.gamemodeother"))
         {
             sender.sendMessage("§cVous n'avez pas la permission.");
             return false;
         }
 
-        Player victim = null;
+        Player victim = player;
 
-
-        for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+        if(args.length > 1)
         {
-            if(!onlinePlayer.getName().equalsIgnoreCase(args[0])) continue;
+            for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+            {
+                if(!onlinePlayer.getName().equalsIgnoreCase(args[1])) continue;
 
-            victim = onlinePlayer;
-        }
-
-        if(victim == null)
-        {
-            sender.sendMessage("§7[§bKick§7] §cVous devez spécifier un joeur correct.");
-            return false;
-        }
-
-        String message = "";
-
-        if(args.length != 1)
-        {
-            for (int i = 0; i < args.length; i++) {
-                if (i == 0) continue;
-
-                message += " " + args[i];
+                victim = onlinePlayer;
             }
 
-            message = message.substring(1);
-            message = message.replaceAll("&", "§");
+            if(victim.getName().equalsIgnoreCase(player.getName()))
+            {
+                sender.sendMessage("§7[§bGamemode§7] §cVous devez spécifier un joueur correct.");
+                return false;
+            }
+
+        }
+
+        GameMode gamemode = null;
+
+        if("survival".startsWith(args[0].toLowerCase()) || "survival".startsWith(args[0].toLowerCase()) ||args[0].equalsIgnoreCase("0")) gamemode = GameMode.SURVIVAL;
+        else if("creative".startsWith(args[0].toLowerCase()) || "creatif".startsWith(args[0].toLowerCase()) ||args[0].equalsIgnoreCase("1")) gamemode = GameMode.CREATIVE;
+        else if("adventure".startsWith(args[0].toLowerCase()) || "aventure".startsWith(args[0].toLowerCase()) ||args[0].equalsIgnoreCase("2")) gamemode = GameMode.ADVENTURE;
+        else if("spectator".startsWith(args[0].toLowerCase()) || "spectateur".startsWith(args[0].toLowerCase()) ||args[0].equalsIgnoreCase("3")) gamemode = GameMode.SPECTATOR;
+
+        victim.setGameMode(gamemode);
+
+
+        if(victim.getName().equalsIgnoreCase(player.getName()))
+        {
+            player.sendMessage("§7[§bGamemode§7] §aVotre gamemode est maintenant §e"  + gamemode.name().toLowerCase() + "§a.");
         }
         else
         {
-            message = "Vous avez été explusé par un modérateur";
+            if(!player.hasPermission("atharion.gamemodeother"))
+            {
+                sender.sendMessage("§7[§bGamemode§7] §cVous n'avez pas la permission.");
+                return false;
+            }
+
+            player.sendMessage("§7[§bGamemode§7] §aLe gamemode de §e" + victim.getDisplayName() + "§a est désormais §e" + gamemode.name().toLowerCase() + "§a.");
+            victim.sendMessage("§7[§bGamemode§7] §e" + player.getDisplayName() + " §aa changé votre gamemode en §e" + gamemode.name().toLowerCase() + "§a.");
         }
 
-        if(message.endsWith("-s"))
-        {
-            message = message.substring(0, message.length() - 1);
-        }
-        else
-        {
-            Bukkit.broadcastMessage("§7[§bKick§7] §e" + victim.getDisplayName() + "§a a été expulsé par §e" + player.getName() + "§a pour §e" + message + "§a .");
-        }
-
-        victim.kickPlayer(message);
-
-        player.sendMessage("§7[§bKick§7] §aVous avez expulsé §e" + victim.getDisplayName() + "§a pour §e" + message + "§a .");
 
         return true;
     }

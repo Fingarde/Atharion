@@ -70,7 +70,8 @@ public class Nick implements CommandExecutor
         if(victim.getName().equalsIgnoreCase(player.getName()))
         {
             player.sendMessage("§7[§bSurnom§7] §aVotre nouveau surnom est §e"  + nickname + "§a.");
-        }else
+        }
+        else
         {
             player.sendMessage("§7[§bSurnom§7] §aLe nouveau surnom de §e" + victim.getDisplayName() + "§a est §e" + nickname + "§a.");
             victim.sendMessage("§7[§bSurnom§7] §e" + player.getDisplayName() + " §aa changé votre pseudo en §e" + nickname + "§a.");

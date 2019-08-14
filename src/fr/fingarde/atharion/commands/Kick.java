@@ -45,7 +45,7 @@ public class Kick implements CommandExecutor
 
         if(victim == null)
         {
-            sender.sendMessage("§7[§bKick§7] §cVous devez spécifier un joeur correct.");
+            sender.sendMessage("§7[§bKick§7] §cVous devez spécifier un joueur correct.");
             return false;
         }
 
