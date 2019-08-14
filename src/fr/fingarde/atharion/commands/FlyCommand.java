@@ -38,18 +38,10 @@ public class FlyCommand implements CommandExecutor, TabCompleter
         }
         else if (args.length == 1 || args.length == 2)
         {
-            if (!sender.hasPermission(permissionOther))
-            {
-                Error.noPermission(sender, permissionOther);
-                return false;
-            }
+            if (!sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther);return false; }
 
             Player victim = Bukkit.getPlayer(args[0]);
-            if (victim == null)
-            {
-                sender.sendMessage(usage);
-                return false;
-            }
+            if (victim == null) { sender.sendMessage(usage); return false; }
 
             String state = "activé";
             boolean allowFlight = true;
@@ -63,11 +55,7 @@ public class FlyCommand implements CommandExecutor, TabCompleter
             if (args.length > 1)
             {
                 String mode = getAllowFlight(args[1]);
-                if (mode == null)
-                {
-                    sender.sendMessage(usage);
-                    return false;
-                }
+                if (mode == null) { sender.sendMessage(usage);return false; }
 
                 if (Boolean.parseBoolean(mode))
                 {
