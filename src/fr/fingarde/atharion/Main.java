@@ -111,7 +111,8 @@ public class Main extends JavaPlugin
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("fly").setTabCompleter(new FlyCommand());
 
-        getCommand("s").setExecutor(new SummonPlayer());
+        getCommand("s").setExecutor(new SummonCommand());
+        getCommand("s").setTabCompleter(new SummonCommand());
 
         getCommand("setrank").setExecutor(new SetRank());
         getCommand("nick").setExecutor(new Nick());

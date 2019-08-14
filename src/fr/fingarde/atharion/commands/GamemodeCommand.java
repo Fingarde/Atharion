@@ -35,7 +35,7 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
 
             player.setGameMode(gamemode);
 
-            player.sendMessage("§aVotre mode de jeu a été définit sur §e" + gamemode.name().toLowerCase() + "§a.");
+            player.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a.");
 
         }
         else if (args.length == 2)
@@ -50,17 +50,17 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
 
             victim.setGameMode(gamemode);
 
-            sender.sendMessage("§aLe mode de jeu de §e" + victim.getDisplayName() + "§a a été définit sur §e" + gamemode.name().toLowerCase() + "§a.");
+            sender.sendMessage("§aLe mode de jeu de §e" + victim.getDisplayName() + "§a a été défini sur §e" + gamemode.name().toLowerCase() + "§a.");
 
             if (victim != sender)
             {
                 if(sender instanceof Player)
                 {
-                    victim.sendMessage("§aVotre mode de jeu a été définit sur §e" + gamemode.name().toLowerCase() + "§a par §e" + ((Player) sender).getDisplayName() + "§a.");
+                    victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + ((Player) sender).getDisplayName() + "§a.");
                 }
                 else
                 {
-                    victim.sendMessage("§aVotre mode de jeu a été définit sur §e" + gamemode.name().toLowerCase() + "§a par §e" + sender.getName() + "§a.");
+                    victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + sender.getName() + "§a.");
                 }
             }
         }
