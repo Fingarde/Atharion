@@ -52,16 +52,12 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
 
             sender.sendMessage("§aLe mode de jeu de §e" + victim.getDisplayName() + "§a a été défini sur §e" + gamemode.name().toLowerCase() + "§a.");
 
+
             if (victim != sender)
             {
-                if(sender instanceof Player)
-                {
-                    victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + ((Player) sender).getDisplayName() + "§a.");
-                }
-                else
-                {
-                    victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + sender.getName() + "§a.");
-                }
+                String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
+
+                victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + name + "§a.");
             }
         }
         else
@@ -102,7 +98,10 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
             {
                 for (String args0 : args0Completer)
                 {
-                    if (args0.startsWith(args[0].toLowerCase())) value.add(args0);
+                    if (args0.startsWith(args[0].toLowerCase()))
+                    {
+                        value.add(args0);
+                    }
                 }
             }
         }
@@ -122,7 +121,10 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
             {
                 for (Player args1 : args1Completer)
                 {
-                    if (args1.getName().toLowerCase().startsWith(args[1].toLowerCase())) value.add(args1.getName());
+                    if (args1.getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                    {
+                        value.add(args1.getName());
+                    }
                 }
             }
         }

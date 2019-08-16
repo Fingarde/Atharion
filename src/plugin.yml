@@ -16,7 +16,7 @@ commands:
   fly:
     description: Allow player fly
   kick:
-    description: Kick player
+    description: KickCommand player
   gamemode:
     aliases:
       - gm

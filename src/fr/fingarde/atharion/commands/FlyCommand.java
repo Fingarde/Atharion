@@ -75,14 +75,9 @@ public class FlyCommand implements CommandExecutor, TabCompleter
 
             if (victim != sender)
             {
-                if (sender instanceof Player)
-                {
-                    victim.sendMessage("§aFly mode §e" + state + "§a par §e" + ((Player) sender).getDisplayName() + "§a.");
-                }
-                else
-                {
-                    victim.sendMessage("§aFly mode §e" + state + "§a par §e" + sender.getName() + "§a.");
-                }
+                String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
+
+                victim.sendMessage("§aFly mode §e" + state + "§a par §e" + name + "§a.");
             }
         }
         else
@@ -124,7 +119,10 @@ public class FlyCommand implements CommandExecutor, TabCompleter
             {
                 for (Player args0 : args0Completer)
                 {
-                    if (args0.getName().toLowerCase().startsWith(args[0].toLowerCase())) value.add(args0.getName());
+                    if (args0.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+                    {
+                        value.add(args0.getName());
+                    }
                 }
             }
         }
@@ -141,7 +139,10 @@ public class FlyCommand implements CommandExecutor, TabCompleter
             {
                 for (String args1 : args1Completer)
                 {
-                    if (args1.startsWith(args[1].toLowerCase())) value.add(args1);
+                    if (args1.startsWith(args[1].toLowerCase()))
+                    {
+                        value.add(args1);
+                    }
                 }
             }
         }

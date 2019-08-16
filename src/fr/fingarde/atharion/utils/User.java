@@ -95,6 +95,7 @@ public class User
             e.printStackTrace();
         }
 
+        loadPermissions();
         loadName();
         loadNameInTab();
     }

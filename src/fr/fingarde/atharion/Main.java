@@ -114,11 +114,16 @@ public class Main extends JavaPlugin
         getCommand("s").setExecutor(new SummonCommand());
         getCommand("s").setTabCompleter(new SummonCommand());
 
-        getCommand("setrank").setExecutor(new SetRank());
+        getCommand("kick").setExecutor(new KickCommand());
+        getCommand("kick").setTabCompleter(new KickCommand());
+
+        getCommand("setrank").setExecutor(new RankCommand());
+        getCommand("setrank").setTabCompleter(new RankCommand());
+
         getCommand("nick").setExecutor(new Nick());
         getCommand("prefix").setExecutor(new Prefix());
 
-        getCommand("kick").setExecutor(new Kick());
+
     }
 
     private void registerListeners()

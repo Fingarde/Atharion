@@ -16,7 +16,6 @@ public class Rank
 
     public Rank(String rank)
     {
-        this.rank = rank;
         File file = getConfig();
 
         YamlConfiguration config = new YamlConfiguration();
@@ -25,8 +24,15 @@ public class Rank
         {
             config.load(file);
 
-           data = (MemorySection) config.get(rank);
-        } catch (InvalidConfigurationException | IOException e)
+            if(!config.contains(rank))
+            {
+                return;
+            }
+
+            this.rank = rank;
+            this.data = (MemorySection) config.get(rank);
+        }
+        catch (InvalidConfigurationException | IOException e)
         {
             e.printStackTrace();
         }
@@ -90,9 +96,34 @@ public class Rank
         return inheritRanks;
     }
 
+    public boolean isNull()
+    {
+        if(this.rank == null) { return true; }
+        else { return false; }
+    }
+
     public File getConfig() {
         File file = new File(Main.getInstance().getDataFolder(), "group.yml");
 
         return file;
+    }
+
+    public static ArrayList<String> getRanks()
+    {
+        File file = new File(Main.getInstance().getDataFolder(), "group.yml");
+
+        YamlConfiguration config = new YamlConfiguration();
+
+        try
+        {
+            config.load(file);
+            return new ArrayList<String>(config.getKeys(false));
+        }
+        catch (InvalidConfigurationException | IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
