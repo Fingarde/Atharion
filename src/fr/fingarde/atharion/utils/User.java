@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class User
 {
-    private static ArrayList<User> users = new ArrayList<>();
+    public static ArrayList<User> users = new ArrayList<>();
 
     private UUID uuid;
 

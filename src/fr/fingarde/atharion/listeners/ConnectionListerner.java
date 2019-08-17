@@ -62,13 +62,15 @@ public class ConnectionListerner implements Listener
         User user = User.getFromUUID(player.getUniqueId());
 
         event.setQuitMessage(user.getDisplayName() + "§c a quitté §e§lAtharion");
+
+        User.users.remove(user);
     }
 
     public String centerMotdLine(String text)
     {
         String textWColor = text;
 
-        for(int i = 0; i < textWColor.length(); i++)
+        for (int i = 0; i < textWColor.length(); i++)
         {
             if (textWColor.charAt(i) == '§')
             {
@@ -80,7 +82,7 @@ public class ConnectionListerner implements Listener
 
         String spaces = "";
 
-        for(int i = 0; i < spaceToAdd; i++) spaces += " ";
+        for (int i = 0; i < spaceToAdd; i++) spaces += " ";
 
         return spaces + text;
     }

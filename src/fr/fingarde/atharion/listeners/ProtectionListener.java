@@ -14,39 +14,39 @@ public class ProtectionListener implements Listener
     @EventHandler
     public void onInteractEntity(PlayerInteractAtEntityEvent event)
     {
-        if(event.getPlayer().hasPermission("atharion.interact")) return;
+        if (event.getPlayer().hasPermission("atharion.interact")) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onInteractEntity2(PlayerInteractEntityEvent event)
     {
-        if(event.getPlayer().hasPermission("atharion.interact")) return;
+        if (event.getPlayer().hasPermission("atharion.interact")) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event)
     {
-        if(event.getPlayer().hasPermission("atharion.interact")) return;
+        if (event.getPlayer().hasPermission("atharion.interact")) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event)
     {
-        if(!(event.getDamager() instanceof Player)) return;
+        if (!(event.getDamager() instanceof Player)) return;
 
-        if(event.getDamager().hasPermission("atharion.interact")) return;
+        if (event.getDamager().hasPermission("atharion.interact")) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onDamage(BlockBreakEvent event)
     {
-        if(!(event.getPlayer() instanceof Player)) return;
+        if (!(event.getPlayer() instanceof Player)) return;
 
-        if(event.getPlayer().hasPermission("atharion.interact")) return;
+        if (event.getPlayer().hasPermission("atharion.interact")) return;
         event.setCancelled(true);
     }
 

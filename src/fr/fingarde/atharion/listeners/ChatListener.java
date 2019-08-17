@@ -1,5 +1,6 @@
 package fr.fingarde.atharion.listeners;
 
+import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.utils.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -15,6 +16,9 @@ public class ChatListener implements Listener
     public void onChat(AsyncPlayerChatEvent event)
     {
         Player player = event.getPlayer();
+
+        if (!player.hasPermission("atharion.chat")) { Error.noPermission(player, "atharion.chat"); event.setCancelled(true); return; }
+
         User user = User.getFromUUID(player.getUniqueId());
 
         event.setCancelled(true);
@@ -23,9 +27,9 @@ public class ChatListener implements Listener
 
         message = "§r" + message;
 
-        for(Player players : Bukkit.getOnlinePlayers())
+        for (Player players : Bukkit.getOnlinePlayers())
         {
-            if(message.toLowerCase().contains(players.getName().toLowerCase()))
+            if (message.toLowerCase().contains(players.getName().toLowerCase()))
             {
                 String color = ChatColor.getLastColors(message.substring(0, message.toLowerCase().lastIndexOf(players.getName().toLowerCase())));
                 int start = message.toLowerCase().indexOf(players.getName().toLowerCase());
@@ -36,7 +40,7 @@ public class ChatListener implements Listener
             }
         }
 
-      for(Player onlinePlayer : Bukkit.getOnlinePlayers())
+      for (Player onlinePlayer : Bukkit.getOnlinePlayers())
       {
           onlinePlayer.sendMessage(ChatColor.WHITE + user.getDisplayName() + "§r" + ChatColor.GOLD + " > " + ChatColor.WHITE + message);
       }
