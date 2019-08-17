@@ -64,6 +64,9 @@ public class Main extends JavaPlugin
         hikari.addDataSourceProperty("autoReconnect", true);
         hikari.addDataSourceProperty("connectTimeout", 300);
 
+        hikari.addDataSourceProperty("characterEncoding","utf8");
+        hikari.addDataSourceProperty("useUnicode","true");
+
         hikari.setMaximumPoolSize(2147483647);
         hikari.setMinimumIdle(0);
         hikari.setIdleTimeout(300);
@@ -78,17 +81,21 @@ public class Main extends JavaPlugin
 
             statement.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS Players(\n" +
-                            "  UUID TEXT NOT NULL,\n" +
-                            "  NICKNAME TEXT NOT NULL,\n" +
-                            "  PREFIX TEXT NOT NULL,\n" +
-                            "  SUFFIX TEXT NOT NULL,\n" +
-                            "  RANK TEXT NOT NULL\n" +
+                            "  id MEDIUMINT NOT NULL AUTO_INCREMENT,\n" +
+                            "  uuid TEXT NOT NULL,\n" +
+                            "  nickname TEXT NOT NULL,\n" +
+                            "  prefix TEXT NOT NULL,\n" +
+                            "  suffix TEXT NOT NULL,\n" +
+                            "  rank TEXT NOT NULL,\n" +
+                            "  PRIMARY KEY (id)\n" +
                             ")");
 
             statement.executeUpdate(
                     "CREATE TABLE IF NOT EXISTS Warps(\n" +
-                            "  NAME TEXT NOT NULL,\n" +
-                            "  LOCATION TEXT NOT NULL\n" +
+                            "  id MEDIUMINT NOT NULL AUTO_INCREMENT,\n" +
+                            "  name TEXT NOT NULL,\n" +
+                            "  location TEXT NOT NULL,\n" +
+                            "  primary KEY (id)\n" +
                             ")");
 
             statement.close();
@@ -120,9 +127,14 @@ public class Main extends JavaPlugin
         getCommand("setrank").setExecutor(new RankCommand());
         getCommand("setrank").setTabCompleter(new RankCommand());
 
-        getCommand("nick").setExecutor(new Nick());
-        getCommand("prefix").setExecutor(new Prefix());
+        getCommand("nick").setExecutor(new NickCommand());
+        getCommand("nick").setTabCompleter(new NickCommand());
 
+        getCommand("prefix").setExecutor(new PrefixCommand());
+        getCommand("prefix").setTabCompleter(new PrefixCommand());
+
+        getCommand("suffix").setExecutor(new SuffixCommand());
+        getCommand("suffix").setTabCompleter(new SuffixCommand());
 
     }
 

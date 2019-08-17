@@ -139,7 +139,7 @@ public class FlyCommand implements CommandExecutor, TabCompleter
             {
                 for (String args1 : args1Completer)
                 {
-                    if (args1.startsWith(args[1].toLowerCase()))
+                    if (args1.toLowerCase().startsWith(args[1].toLowerCase()))
                     {
                         value.add(args1);
                     }

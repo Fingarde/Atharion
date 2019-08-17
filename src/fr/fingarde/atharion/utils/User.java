@@ -36,14 +36,14 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            ResultSet result = statement.executeQuery("SELECT * FROM Players WHERE UUID = '" + this.uuid.toString() + "'");
+            ResultSet result = statement.executeQuery("SELECT * FROM Players WHERE uuid = '" + this.uuid.toString() + "'");
 
-            if(!result.next()) return;
+            if (!result.next()) { return; }
 
-            this.rank = new Rank(result.getString("RANK"));
-            this.nickname = result.getString("NICKNAME");
-            this.prefix = result.getString("PREFIX");
-            this.suffix = result.getString("SUFFIX");
+            this.rank = new Rank(result.getString("rank"));
+            this.nickname = result.getString("nickname");
+            this.prefix = result.getString("prefix");
+            this.suffix = result.getString("suffix");
 
             this.player = Bukkit.getPlayer(this.uuid);
 
@@ -86,7 +86,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET RANK = '" + this.rank.getName() + "' WHERE UUID = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET rank = '" + this.rank.getName() + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
@@ -115,7 +115,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET PREFIX = '" + this.prefix + "' WHERE UUID = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET prefix = '" + this.prefix.replaceAll("'", "\\\\'") + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
@@ -143,7 +143,8 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET SUFFIX = '" + this.suffix + "' WHERE UUID = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET suffix = '" + this.suffix.replaceAll("'", "\\\\'") + "' WHERE uuid = '" + this.uuid + "'");
+
 
             statement.close();
             connection.close();
@@ -171,7 +172,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET NICKNAME = '" + this.nickname + "' WHERE UUID = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET nickname = '" + this.nickname.replaceAll("'", "\\\\'") + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
@@ -191,13 +192,13 @@ public class User
 
     public void loadPermissions()
     {
-        if(this.rank.getPermissions() != null)
+        if (this.rank.getPermissions() != null)
         {
             PermissionAttachment attachment = this.player.addAttachment(Main.getInstance());
 
-            for(String permission : this.rank.getPermissions())
+            for (String permission : this.rank.getPermissions())
             {
-                if(permission.startsWith("-"))
+                if (permission.startsWith("-"))
                 {
                     permission = permission.substring(1);
                     attachment.setPermission(permission, false);
@@ -212,7 +213,7 @@ public class User
 
     public void loadNameInTab()
     {
-        if(this.rank.getTeamName() != null)
+        if (this.rank.getTeamName() != null)
         {
             try
             {
@@ -230,26 +231,26 @@ public class User
 
     private void loadName()
     {
-        if(this.nickname != "") this.player.setDisplayName(this.nickname);
+        this.player.setDisplayName(this.player.getName());
+        if (this.nickname != "") { this.player.setDisplayName(this.nickname); }
 
         String localPrefix = "";
         String localSuffix = "";
 
-        if(this.rank.getPrefix() != null) localPrefix = this.rank.getPrefix() + " ";
-        if(this.rank.getSuffix()!= null) localSuffix =  " " + this.rank.getSuffix();
+        if (this.rank.getPrefix() != null) { localPrefix = this.rank.getPrefix() + " "; }
+        if (this.rank.getSuffix()!= null) { localSuffix =  " " + this.rank.getSuffix(); }
 
-        if(this.prefix != "")  localPrefix = this.prefix + " ";
-        if(this.suffix != "")  localSuffix = " " + this.suffix;
-
+        if (this.prefix != "") { localPrefix = this.prefix + " "; }
+        if (this.suffix != "") { localSuffix = " " + this.suffix; }
 
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
     }
 
     public static User getFromUUID(UUID uuid)
     {
-        for(User userInArray : users)
+        for (User userInArray : users)
         {
-            if(userInArray.getUUID() == uuid) return userInArray;
+            if (userInArray.getUUID() == uuid) { return userInArray; }
         }
 
         return null;

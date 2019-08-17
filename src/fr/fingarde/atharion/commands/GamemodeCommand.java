@@ -98,7 +98,7 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
             {
                 for (String args0 : args0Completer)
                 {
-                    if (args0.startsWith(args[0].toLowerCase()))
+                    if (args0.toLowerCase().startsWith(args[0].toLowerCase()))
                     {
                         value.add(args0);
                     }

@@ -32,11 +32,11 @@ public class ConnectionListerner implements Listener
             Connection connection = Main.getHikari().getConnection();
             Statement statement = connection.createStatement();
 
-            ResultSet result = statement.executeQuery("SELECT * FROM Players WHERE UUID = '" + player.getUniqueId().toString() + "'");
+            ResultSet result = statement.executeQuery("SELECT * FROM Players WHERE uuid = '" + player.getUniqueId().toString() + "'");
 
             if(!result.next())
             {
-                statement.executeUpdate("INSERT INTO Players (UUID, RANK, NICKNAME, PREFIX, SUFFIX) VALUES ('" + player.getUniqueId().toString() + "', 'visiteur', '', '', '')");
+                statement.executeUpdate("INSERT INTO Players (uuid, rank, nickname, prefix, suffix) VALUES ('" + player.getUniqueId().toString() + "', 'visiteur', '', '', '')");
 
                 statement.close();
                 connection.close();
