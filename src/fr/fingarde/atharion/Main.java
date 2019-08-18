@@ -95,6 +95,8 @@ public class Main extends JavaPlugin
                             "  id MEDIUMINT NOT NULL AUTO_INCREMENT,\n" +
                             "  name TEXT NOT NULL,\n" +
                             "  location TEXT NOT NULL,\n" +
+                            "  item TEXT NOT NULL,\n" +
+                            "  description TEXT NOT NULL,\n" +
                             "  primary KEY (id)\n" +
                             ")");
 
@@ -135,6 +137,8 @@ public class Main extends JavaPlugin
 
         getCommand("suffix").setExecutor(new SuffixCommand());
         getCommand("suffix").setTabCompleter(new SuffixCommand());
+
+        getCommand("setwarp").setExecutor(new CreateWarp());
 
     }
 
