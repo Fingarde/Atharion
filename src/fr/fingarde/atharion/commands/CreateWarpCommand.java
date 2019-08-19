@@ -13,7 +13,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CreateWarp implements CommandExecutor
+public class CreateWarpCommand implements CommandExecutor
 {
     String usage = "§bUsage: §r/setwarp §a<nom>";
     String permission = "atharion.creawarp";
@@ -31,20 +31,21 @@ public class CreateWarp implements CommandExecutor
                 Connection connection = Main.getHikari().getConnection();
                 Statement statement = connection.createStatement();
 
-                String location = LocationSerializer.serializeCentered(((Player) sender).getLocation());
-                if(Warp.getByName(args[0]) == null)
+                String location = LocationSerializer.serializeCenteredYP(((Player) sender).getLocation());
+                if (Warp.getByName(args[0]) == null)
                 {
                     statement.executeUpdate("INSERT INTO Warps (name, location, item, description) VALUES ('" + args[0] + "', '" + location + "', '', '')");
                 }
                 else
                 {
-                   statement.executeUpdate("UPDATE Warps SET location = '" + location + "' WHERE name = '" + Warp.getByName(args[0]).geName() + "'");
+                   statement.executeUpdate("UPDATE Warps SET location = '" + location + "' WHERE name = '" + Warp.getByName(args[0]).getName() + "'");
                 }
 
                 statement.close();
                 connection.close();
                 sender.sendMessage("§e" + ((Player) sender).getDisplayName() + "§a vient de créer le warp §e" + args[0] + "§a.");
 
+                Warp.loadWarps();
             }
             catch (SQLException e)
             {

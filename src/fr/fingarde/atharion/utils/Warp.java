@@ -1,9 +1,9 @@
 package fr.fingarde.atharion.utils;
 
 import fr.fingarde.atharion.Main;
+import org.bukkit.Location;
 import org.bukkit.Material;
 
-import javax.xml.stream.Location;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ public class Warp
     private final Material item;
     private final String description;
 
-    static ArrayList<Warp> warps = new ArrayList<>();
+    public static ArrayList<Warp> warps = new ArrayList<>();
 
 
     public Warp(String name, Location location, Material material, String description)
@@ -28,13 +28,30 @@ public class Warp
         this.description = description;
     }
 
-    public String geName()
+    public String getName()
     {
         return warp;
     }
 
+    public Location getLocation()
+    {
+        return location;
+    }
+
+    public Material getItem()
+    {
+        return item;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+
     public static void loadWarps()
     {
+        warps.clear();
+
         try
         {
             Connection connection = Main.getHikari().getConnection();
@@ -45,8 +62,9 @@ public class Warp
 
             while (result.next())
             {
+                Warp warp = new Warp(result.getString("name"), LocationSerializer.deserialize(result.getString("location")), (result.getString("item") == "") ? null : Material.valueOf(result.getString("item").toUpperCase()), result.getString("description"));
 
-
+                warps.add(warp);
             }
         }
         catch (SQLException e)
@@ -60,10 +78,9 @@ public class Warp
     {
         for (Warp warpArray : warps)
         {
-              if (warpArray.geName().equalsIgnoreCase(name)) { return warpArray; }
+              if (warpArray.getName().equalsIgnoreCase(name)) { return warpArray; }
         }
 
         return null;
     }
-
 }

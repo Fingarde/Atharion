@@ -6,6 +6,7 @@ import fr.fingarde.atharion.listeners.ChatListener;
 import fr.fingarde.atharion.listeners.ConnectionListerner;
 import fr.fingarde.atharion.listeners.ProtectionListener;
 import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.utils.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -44,6 +45,7 @@ public class Main extends JavaPlugin
         registerListeners();
 
         restorePlayers();
+        Warp.loadWarps();
     }
 
     private void connectDatabase()
@@ -138,7 +140,8 @@ public class Main extends JavaPlugin
         getCommand("suffix").setExecutor(new SuffixCommand());
         getCommand("suffix").setTabCompleter(new SuffixCommand());
 
-        getCommand("setwarp").setExecutor(new CreateWarp());
+        getCommand("createwarp").setExecutor(new CreateWarpCommand());
+        getCommand("warp").setExecutor(new WarpCommand());
 
     }
 

@@ -21,9 +21,21 @@ public class LocationSerializer
     {
         String[] values = string.split(" ");
 
-        if(values.length != 4) return null;
+        if(values.length < 4 || values.length > 6) return null;
 
-        Location loc = new Location(Bukkit.getWorld(values[0]), Double.valueOf(values[1]), Double.valueOf(values[2]), Double.valueOf(values[3]));
+        Location loc = new Location(Bukkit.getWorld(values[0]), Double.valueOf(values[1]), Double.valueOf(values[2]), Double.valueOf(values[3]), (values.length < 5) ? 0 : Float.valueOf(values[4]) ,  (values.length < 6) ? 0 : Float.valueOf(values[5]));
         return loc;
+    }
+
+    public static String serializeCenteredYP(Location location)
+    {
+        String value = location.getWorld().getName() + " " + (location.getBlockX() + 0.5) + " " + location.getBlockY() + " " + (location.getBlockZ() + 0.5) + " " + location.getYaw() + " " + location.getPitch();
+        return value;
+    }
+
+    public static String serializeYP(Location location)
+    {
+        String value = location.getWorld().getName() + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ() + " " + location.getYaw() + " " + location.getPitch();
+        return value;
     }
 }

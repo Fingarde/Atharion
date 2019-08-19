@@ -21,3 +21,11 @@ commands:
     aliases:
       - gm
     description: Change gamemode
+  createwarp:
+    aliases:
+      - setwarp
+    description: Create warp
+  warp:
+      aliases:
+        - warps
+      description: Teleport to warp
