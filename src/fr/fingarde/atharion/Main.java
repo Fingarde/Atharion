@@ -140,6 +140,9 @@ public class Main extends JavaPlugin
         getCommand("suffix").setExecutor(new SuffixCommand());
         getCommand("suffix").setTabCompleter(new SuffixCommand());
 
+        getCommand("item").setExecutor(new ItemCommand());
+        getCommand("item").setTabCompleter(new ItemCommand());
+
         getCommand("createwarp").setExecutor(new CreateWarpCommand());
         getCommand("warp").setExecutor(new WarpCommand());
 

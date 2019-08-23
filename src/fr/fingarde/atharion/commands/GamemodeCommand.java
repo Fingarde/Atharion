@@ -37,6 +37,7 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
 
             player.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a.");
 
+            return true;
         }
         else if (args.length == 2)
         {
@@ -59,13 +60,15 @@ public class GamemodeCommand implements CommandExecutor, TabCompleter
 
                 victim.sendMessage("§aVotre mode de jeu a été défini sur §e" + gamemode.name().toLowerCase() + "§a par §e" + name + "§a.");
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
-        }
 
-        return true;
+            return false;
+        }
     }
 
     private GameMode getGamemode(String value)

@@ -15,7 +15,7 @@ import java.util.List;
 public class SummonCommand implements CommandExecutor, TabCompleter
 {
 
-    String usage = "§bUsage: §r/s §7[player]";
+    String usage = "§bUsage: §r/s §a<player>";
     String permission = "atharion.summon";
 
     @Override
@@ -35,13 +35,14 @@ public class SummonCommand implements CommandExecutor, TabCompleter
 
             player.sendMessage("§aVous avez téléporté §e" + victim.getDisplayName() + "§a vers vous.");
             victim.sendMessage("§e" + player.getDisplayName() + "§a vous avez téléporté vers lui.");
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override

@@ -63,13 +63,14 @@ public class NickCommand implements CommandExecutor, TabCompleter
                 victim.sendMessage("§aVotre surnom a été défini sur §e" + nick + "§a par §e" + name);
 
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override

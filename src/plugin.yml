@@ -20,7 +20,11 @@ commands:
   gamemode:
     aliases:
       - gm
-    description: Change gamemode
+    description: Change gamemode*
+  item:
+    aliases:
+      - i
+    description: Modify item
   createwarp:
     aliases:
       - setwarp

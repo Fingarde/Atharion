@@ -35,6 +35,8 @@ public class FlyCommand implements CommandExecutor, TabCompleter
             player.setAllowFlight(!player.getAllowFlight());
 
             player.sendMessage("§aFly mode §e" + state + "§a.");
+
+            return true;
         }
         else if (args.length == 1 || args.length == 2)
         {
@@ -79,13 +81,14 @@ public class FlyCommand implements CommandExecutor, TabCompleter
 
                 victim.sendMessage("§aFly mode §e" + state + "§a par §e" + name + "§a.");
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     private String getAllowFlight(String value)

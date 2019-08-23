@@ -62,13 +62,14 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
 
                 victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name);
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override

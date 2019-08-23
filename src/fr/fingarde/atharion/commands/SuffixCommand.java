@@ -62,13 +62,14 @@ public class SuffixCommand implements CommandExecutor, TabCompleter
 
                 victim.sendMessage("§aVotre suffix a été défini sur §e" + suffix + "§a par §e" + name);
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override

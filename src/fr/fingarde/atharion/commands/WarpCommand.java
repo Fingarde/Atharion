@@ -59,6 +59,8 @@ public class WarpCommand implements CommandExecutor
             }
 
             ((Player) sender).openInventory(inventory);
+
+            return true;
         }
         else if (args.length == 1)
         {
@@ -71,13 +73,15 @@ public class WarpCommand implements CommandExecutor
             Location location = Warp.getByName(args[0]).getLocation();
 
             ((Player) sender).teleport(location);
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
-        }
 
-        return true;
+            return false;
+        }
     }
 
     private int toMultipleOf9(int i)

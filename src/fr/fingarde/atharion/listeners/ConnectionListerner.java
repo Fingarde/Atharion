@@ -86,5 +86,4 @@ public class ConnectionListerner implements Listener
 
         return spaces + text;
     }
-
 }

@@ -46,13 +46,14 @@ public class RankCommand implements CommandExecutor, TabCompleter
 
                 victim.sendMessage("§e" + name + "§a vient de vous attribuer le rang §e" + rank.getName() + "§a.");
             }
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override

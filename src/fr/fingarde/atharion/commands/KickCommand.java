@@ -47,13 +47,14 @@ public class KickCommand implements CommandExecutor, TabCompleter
             victim.kickPlayer(basicMessage + message);
 
             Bukkit.broadcastMessage("§e" + name + "§a vient d'exclure §e" + victim.getDisplayName() + ((message.length() == 0) ? "" : "§a pour §e" + message + "§a."));
+
+            return true;
         }
         else
         {
             sender.sendMessage(usage);
+            return false;
         }
-
-        return true;
     }
 
     @Override
