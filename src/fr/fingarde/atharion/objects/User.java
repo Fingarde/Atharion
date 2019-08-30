@@ -1,4 +1,4 @@
-package fr.fingarde.atharion.utils;
+package fr.fingarde.atharion.objects;
 
 import fr.fingarde.atharion.Main;
 import org.bukkit.Bukkit;
@@ -237,11 +237,11 @@ public class User
         String localPrefix = "";
         String localSuffix = "";
 
-        if (this.rank.getPrefix() != null) { localPrefix = this.rank.getPrefix() + " "; }
-        if (this.rank.getSuffix()!= null) { localSuffix =  " " + this.rank.getSuffix(); }
+        if (this.rank.getPrefix() != null) { localPrefix = this.rank.getPrefix() + " " + "§r"; }
+        if (this.rank.getSuffix()!= null) { localSuffix =  "§r" + " " + this.rank.getSuffix(); }
 
-        if (this.prefix != "") { localPrefix = this.prefix + " "; }
-        if (this.suffix != "") { localSuffix = " " + this.suffix; }
+        if (this.prefix != "") { localPrefix = ((this.prefix.length() == 2 && this.prefix.startsWith("§")) ? this.prefix : (this.prefix + " ")) + "§r"; }
+        if (this.suffix != "") { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
 
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
     }

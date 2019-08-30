@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.listeners;
 
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.objects.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;

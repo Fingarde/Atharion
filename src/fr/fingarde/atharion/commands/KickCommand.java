@@ -29,7 +29,7 @@ public class KickCommand implements CommandExecutor, TabCompleter
 
             String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-            String basicMessage = "§e" + name + "§a vient de vous exclure d'§e§lAtharion§r§a";
+            String basicMessage = "§e" + name + "§a vient de vous exclure d'§e§lAtharion§r§a.";
             String message = "";
 
             if (args.length > 1)

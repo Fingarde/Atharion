@@ -1,8 +1,8 @@
 package fr.fingarde.atharion.commands;
 
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.Rank;
-import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.objects.Rank;
+import fr.fingarde.atharion.objects.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

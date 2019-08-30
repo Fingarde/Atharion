@@ -1,4 +1,4 @@
-package fr.fingarde.atharion;
+package fr.fingarde.atharion.commands;
 
 import fr.fingarde.atharion.utils.Error;
 import org.bukkit.Material;

@@ -1,9 +1,10 @@
 package fr.fingarde.atharion.commands;
 
 import fr.fingarde.atharion.Main;
-import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.LocationSerializer;
 import fr.fingarde.atharion.objects.Warp;
+import fr.fingarde.atharion.utils.Error;
+import fr.fingarde.atharion.utils.ItemSerializer;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -13,10 +14,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CreateWarpCommand implements CommandExecutor
+public class SetWarpItemCommand implements CommandExecutor
 {
-    String usage = "§bUsage: §r/setwarp §a<nom>";
-    String permission = "atharion.creawarp";
+    String usage = "§bUsage: §r/setwarpitem §a<nom>";
+    String permission = "atharion.setwarpitem";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -31,19 +32,19 @@ public class CreateWarpCommand implements CommandExecutor
                 Connection connection = Main.getHikari().getConnection();
                 Statement statement = connection.createStatement();
 
-                String location = LocationSerializer.serializeCenteredYP(((Player) sender).getLocation());
+            if (((Player) sender).getInventory().getItemInMainHand().getType() == Material.AIR) { sender.sendMessage("§cVous devez tenir un objet en main."); return false; }
                 if (Warp.getByName(args[0]) == null)
                 {
-                    statement.executeUpdate("INSERT INTO Warps (name, location, item, description) VALUES ('" + args[0] + "', '" + location + "', '', '')");
+                    { sender.sendMessage("§cLe warp §e" + args[0] + "§c n'existe pas."); return false; }
                 }
                 else
                 {
-                   statement.executeUpdate("UPDATE Warps SET location = '" + location + "' WHERE name = '" + Warp.getByName(args[0]).getName() + "'");
+                   statement.executeUpdate("UPDATE Warps SET item = '" + ItemSerializer.serializeItem(((Player) sender).getInventory().getItemInMainHand()) + "' WHERE name = '" + Warp.getByName(args[0]).getName() + "'");
                 }
 
                 statement.close();
                 connection.close();
-                sender.sendMessage("§e" + ((Player) sender).getDisplayName() + "§a vient de créer le warp §e" + args[0] + "§a.");
+                sender.sendMessage("§e" + ((Player) sender).getDisplayName() + "§a vient de changer l'item du  warp §e" + args[0] + "§a.");
 
                 Warp.loadWarps();
             }
@@ -51,9 +52,6 @@ public class CreateWarpCommand implements CommandExecutor
             {
                 e.printStackTrace();
             }
-
-
-
         }
         else
         {

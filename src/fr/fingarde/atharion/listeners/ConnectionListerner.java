@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.listeners;
 
 import fr.fingarde.atharion.Main;
-import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.objects.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.commands;
 
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.objects.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,31 +23,34 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
     {
         if (args.length >= 1)
         {
+
             if (!sender.hasPermission(permission)) { Error.noPermission(sender, permission); return false; }
 
-            Player player = (Player) sender;
-
-            Player victim = player;
+            Player victim = null;
 
             if (Bukkit.getPlayer(args[0]) != null)
             {
                 victim = Bukkit.getPlayer(args[0]);
             }
 
-            if (victim != player && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if (victim != player && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
+            if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
+            if(victim == null) victim = (Player) sender;
 
-
+            if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
             String prefix = "";
             for (int i = 0; i < args.length; i++)
             {
-                if(victim != player && i == 0) continue;
+                if(victim != sender && i == 0) continue;
 
                 prefix += " " + args[i];
             }
 
             prefix = prefix.substring(1);
             prefix = prefix.replaceAll("&", "§");
+
+            boolean silent = false;
+            if (prefix.endsWith(" -s")) { silent = true ; prefix = prefix.substring(0, prefix.length() - 3); }
+
 
             if (prefix.equalsIgnoreCase("reset")) { prefix = ""; }
             User user = User.getFromUUID(victim.getUniqueId());
@@ -60,7 +63,7 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name);
+                if (!silent) victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name);
             }
 
             return true;

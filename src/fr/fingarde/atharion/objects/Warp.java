@@ -1,8 +1,10 @@
-package fr.fingarde.atharion.utils;
+package fr.fingarde.atharion.objects;
 
 import fr.fingarde.atharion.Main;
+import fr.fingarde.atharion.utils.ItemSerializer;
+import fr.fingarde.atharion.utils.LocationSerializer;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,18 +16,16 @@ public class Warp
 {
     private String warp;
     private Location location;
-    private final Material item;
-    private final String description;
+    private final ItemStack item;
 
     public static ArrayList<Warp> warps = new ArrayList<>();
 
 
-    public Warp(String name, Location location, Material material, String description)
+    public Warp(String name, Location location, ItemStack item)
     {
         this.warp = name;
         this.location = location;
-        this.item = material;
-        this.description = description;
+        this.item = item;
     }
 
     public String getName()
@@ -38,14 +38,9 @@ public class Warp
         return location;
     }
 
-    public Material getItem()
+    public ItemStack getItem()
     {
         return item;
-    }
-
-    public String getDescription()
-    {
-        return description;
     }
 
     public static void loadWarps()
@@ -62,7 +57,7 @@ public class Warp
 
             while (result.next())
             {
-                Warp warp = new Warp(result.getString("name"), LocationSerializer.deserialize(result.getString("location")), (result.getString("item") == "") ? null : Material.valueOf(result.getString("item").toUpperCase()), result.getString("description"));
+                Warp warp = new Warp(result.getString("name"), LocationSerializer.deserialize(result.getString("location")), (result.getString("item") == "") ? null : ItemSerializer.deserializeItem(result.getString("item")));
 
                 warps.add(warp);
             }

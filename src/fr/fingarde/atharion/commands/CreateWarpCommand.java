@@ -3,7 +3,7 @@ package fr.fingarde.atharion.commands;
 import fr.fingarde.atharion.Main;
 import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.utils.LocationSerializer;
-import fr.fingarde.atharion.utils.Warp;
+import fr.fingarde.atharion.objects.Warp;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +16,7 @@ import java.sql.Statement;
 public class CreateWarpCommand implements CommandExecutor
 {
     String usage = "§bUsage: §r/setwarp §a<nom>";
-    String permission = "atharion.creawarp";
+    String permission = "atharion.createwarp";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -34,7 +34,7 @@ public class CreateWarpCommand implements CommandExecutor
                 String location = LocationSerializer.serializeCenteredYP(((Player) sender).getLocation());
                 if (Warp.getByName(args[0]) == null)
                 {
-                    statement.executeUpdate("INSERT INTO Warps (name, location, item, description) VALUES ('" + args[0] + "', '" + location + "', '', '')");
+                    statement.executeUpdate("INSERT INTO Warps (name, location, item) VALUES ('" + args[0] + "', '" + location + "', '')");
                 }
                 else
                 {
@@ -51,9 +51,6 @@ public class CreateWarpCommand implements CommandExecutor
             {
                 e.printStackTrace();
             }
-
-
-
         }
         else
         {

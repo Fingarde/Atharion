@@ -29,6 +29,8 @@ commands:
     aliases:
       - setwarp
     description: Create warp
+  setwarpitem:
+    description: Create warp
   warp:
       aliases:
         - warps

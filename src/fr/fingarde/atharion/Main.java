@@ -5,8 +5,8 @@ import fr.fingarde.atharion.commands.*;
 import fr.fingarde.atharion.listeners.ChatListener;
 import fr.fingarde.atharion.listeners.ConnectionListerner;
 import fr.fingarde.atharion.listeners.ProtectionListener;
-import fr.fingarde.atharion.utils.User;
-import fr.fingarde.atharion.utils.Warp;
+import fr.fingarde.atharion.objects.User;
+import fr.fingarde.atharion.objects.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -89,7 +89,7 @@ public class Main extends JavaPlugin
                             "  prefix TEXT NOT NULL,\n" +
                             "  suffix TEXT NOT NULL,\n" +
                             "  rank TEXT NOT NULL,\n" +
-                            "  PRIMARY KEY (id)\n" +
+                            "  primary KEY (id)\n" +
                             ")");
 
             statement.executeUpdate(
@@ -98,7 +98,6 @@ public class Main extends JavaPlugin
                             "  name TEXT NOT NULL,\n" +
                             "  location TEXT NOT NULL,\n" +
                             "  item TEXT NOT NULL,\n" +
-                            "  description TEXT NOT NULL,\n" +
                             "  primary KEY (id)\n" +
                             ")");
 
@@ -144,6 +143,8 @@ public class Main extends JavaPlugin
         getCommand("item").setTabCompleter(new ItemCommand());
 
         getCommand("createwarp").setExecutor(new CreateWarpCommand());
+        getCommand("setwarpitem").setExecutor(new SetWarpItemCommand());
+
         getCommand("warp").setExecutor(new WarpCommand());
 
     }

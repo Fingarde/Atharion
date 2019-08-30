@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.commands;
 
+import fr.fingarde.atharion.objects.Warp;
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -9,8 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,7 @@ public class WarpCommand implements CommandExecutor
         if(args.length == 0)
         {
             if (!(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if (!sender.hasPermission(permission + ".gui") && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + ".gui"); return false; }
+            if (!sender.hasPermission(permission + ".opengui") && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + ".opengui"); return false; }
 
             ArrayList<Warp> warpsToAddInInv = new ArrayList<>();//
 
@@ -37,25 +35,11 @@ public class WarpCommand implements CommandExecutor
                 }
             }
 
-            Inventory inventory = Bukkit.createInventory((Player) sender, (warpsToAddInInv.size() > 54) ? 54 : toMultipleOf9(warpsToAddInInv.size()), " §c§lWarps");
+            Inventory inventory = Bukkit.createInventory((Player) sender, (warpsToAddInInv.size() > 54) ? 54 : toMultipleOf9(warpsToAddInInv.size()), "  §8§lWarps");
 
             for(Warp warp : warpsToAddInInv)
             {
-                ItemStack itemStack = new ItemStack(warp.getItem());
-
-                ItemMeta itemMeta =  itemStack.getItemMeta();
-
-                itemMeta.setDisplayName("§r" + warp.getName());
-
-                ArrayList<String> lore = new ArrayList<>();
-
-                lore.add(warp.getDescription());
-
-                itemMeta.setLore(lore);
-                itemStack.setItemMeta(itemMeta);
-
-                // TODO replace item + desc par itemstack + add command setlore + setname
-                inventory.addItem(itemStack);
+                inventory.addItem(warp.getItem());
             }
 
             ((Player) sender).openInventory(inventory);

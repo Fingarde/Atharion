@@ -1,4 +1,4 @@
-package fr.fingarde.atharion.utils;
+package fr.fingarde.atharion.objects;
 
 import fr.fingarde.atharion.Main;
 import org.bukkit.configuration.InvalidConfigurationException;

@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.commands;
 
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.User;
+import fr.fingarde.atharion.objects.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,31 +23,35 @@ public class SuffixCommand implements CommandExecutor, TabCompleter
     {
         if (args.length >= 1)
         {
+
             if (!sender.hasPermission(permission)) { Error.noPermission(sender, permission); return false; }
 
-            Player player = (Player) sender;
-
-            Player victim = player;
+            Player victim = null;
 
             if (Bukkit.getPlayer(args[0]) != null)
             {
                 victim = Bukkit.getPlayer(args[0]);
             }
 
-            if (victim != player && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if (victim != player && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
+            if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
+            if(victim == null) victim = (Player) sender;
 
+            if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
 
             String suffix = "";
             for (int i = 0; i < args.length; i++)
             {
-                if(victim != player && i == 0) continue;
+                if(victim != sender && i == 0) continue;
 
                 suffix += " " + args[i];
             }
 
             suffix = suffix.substring(1);
             suffix = suffix.replaceAll("&", "§");
+
+            boolean silent = false;
+            if (suffix.endsWith(" -s")) { silent = true ; suffix = suffix.substring(0, suffix.length() - 3); }
+
 
             if (suffix.equalsIgnoreCase("reset")) { suffix = ""; }
             User user = User.getFromUUID(victim.getUniqueId());
@@ -60,7 +64,7 @@ public class SuffixCommand implements CommandExecutor, TabCompleter
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                victim.sendMessage("§aVotre suffix a été défini sur §e" + suffix + "§a par §e" + name);
+                if (!silent) victim.sendMessage("§aVotre suffix a été défini sur §e" + suffix + "§a par §e" + name);
             }
 
             return true;
