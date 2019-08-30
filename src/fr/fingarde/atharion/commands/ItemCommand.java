@@ -1,7 +1,7 @@
 package fr.fingarde.atharion;
 
 import fr.fingarde.atharion.utils.Error;
-import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemCommand implements CommandExecutor, TabCompleter
@@ -30,7 +30,7 @@ public class ItemCommand implements CommandExecutor, TabCompleter
 
             Player player = (Player) sender;
 
-            player.sendMessage("ee");
+            if(player.getInventory().getItemInMainHand().getType() == Material.AIR) { player.sendMessage("§cVous devez tenir un objet en main."); return false; }
 
             if (args[0].equalsIgnoreCase("name"))
             {
@@ -48,10 +48,11 @@ public class ItemCommand implements CommandExecutor, TabCompleter
                 ItemStack itemStack = player.getInventory().getItemInMainHand();
                 ItemMeta itemMeta = itemStack.getItemMeta();
 
-                itemMeta.setDisplayName(name);
+                itemMeta.setDisplayName("§r" + name);
 
                 itemStack.setItemMeta(itemMeta);
 
+                player.sendMessage("§aLe nom de votre objet a été changé en §e" + name + "§a.");
                 return true;
             }
             else if (args[0].equalsIgnoreCase("lore"))
@@ -74,7 +75,37 @@ public class ItemCommand implements CommandExecutor, TabCompleter
 
                     ItemStack itemStack = player.getInventory().getItemInMainHand();
                     ItemMeta itemMeta = itemStack.getItemMeta();
-                    
+
+                    List<String> oldLore = new ArrayList<>();
+                    if(itemMeta.getLore() != null)
+                    {
+                        oldLore = itemMeta.getLore();
+                    }
+
+                    List<String> newLore = new ArrayList<>();
+
+                    for(int i = 0; i < (line + 1 > oldLore.size() ? line + 1 : oldLore.size()); i++ )
+                    {
+
+                        if(line == i)
+                        {
+                            newLore.add("§r" + value);
+                        }
+                        else  if(oldLore.size() > i)
+                        {
+                            newLore.add(oldLore.get(i));
+                        }
+                        else
+                        {
+                            newLore.add("");
+                        }
+                    }
+
+                    itemMeta.setLore(newLore);
+                    itemStack.setItemMeta(itemMeta);
+
+                    player.sendMessage("§aLa ligne §e" + line + "§a de votre objet a été changé en §e" + value + "§a.");
+                    return true;
 
                 }
                 catch (NumberFormatException e)
@@ -82,8 +113,6 @@ public class ItemCommand implements CommandExecutor, TabCompleter
                     sender.sendMessage(usage);
                     return false;
                 }
-
-                return true;
             }
 
             sender.sendMessage(usage);
@@ -104,20 +133,20 @@ public class ItemCommand implements CommandExecutor, TabCompleter
         if (args.length == 1)
         {
             value = new ArrayList<>();
-            Collection<? extends Player> args0Completer = Bukkit.getOnlinePlayers();
+            List<String> args0Completer = Arrays.asList("name", "lore");
 
             if (args[0].length() == 0)
             {
-                for(Player args0 : args0Completer)
-                {
-                    value.add(args0.getName());
-                }
+                value = args0Completer;
             }
             else
             {
-                for (Player args0 : args0Completer)
+                for (String args0 : args0Completer)
                 {
-                    if (args0.getName().toLowerCase().startsWith(args[0].toLowerCase())) value.add(args0.getName());
+                    if (args0.toLowerCase().startsWith(args[0].toLowerCase()))
+                    {
+                        value.add(args0);
+                    }
                 }
             }
         }
