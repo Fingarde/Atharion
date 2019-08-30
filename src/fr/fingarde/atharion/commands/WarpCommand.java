@@ -7,12 +7,15 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class WarpCommand implements CommandExecutor
+public class WarpCommand implements CommandExecutor, TabCompleter
 {
     String usage = "§bUsage: §r/warp §a<nom>";
     String permission = "atharion.warp";
@@ -29,7 +32,7 @@ public class WarpCommand implements CommandExecutor
 
             for(Warp warp : Warp.warps)
             {
-                if(warp.getItem() != null && sender.hasPermission(permission + warp.getName().toLowerCase()))
+                if(warp.getItem() != null && sender.hasPermission(permission + "." + warp.getName()))
                 {
                     warpsToAddInInv.add(warp);
                 }
@@ -52,7 +55,7 @@ public class WarpCommand implements CommandExecutor
 
             if (Warp.getByName(args[0]) == null) { sender.sendMessage(usage); return false; }
 
-            if (!sender.hasPermission(permission + "." + args[0].toLowerCase()) && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + "." + args[0].toLowerCase()); return false; }
+            if (!sender.hasPermission(permission + "." + args[0]) && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + "." + args[0].toLowerCase()); return false; }
 
             Location location = Warp.getByName(args[0]).getLocation();
 
@@ -71,5 +74,37 @@ public class WarpCommand implements CommandExecutor
     private int toMultipleOf9(int i)
     {
         return ((int) Math.ceil(i / (float) 9) * 9);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)
+    {
+        List<String> value = null;
+
+        if (args.length == 1)
+        {
+            value = new ArrayList<>();
+            ArrayList<Warp> args0Completer = Warp.warps;
+
+            if (args[0].length() == 0)
+            {
+                for(Warp args0 : args0Completer)
+                {
+                    if(sender.hasPermission(permission + "." + args0.getName())) { value.add(args0.getName()); }
+                }
+            }
+            else
+            {
+                for (Warp args0 : args0Completer)
+                {
+                    if (args0.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+                    {
+                        if(sender.hasPermission(permission + "." + args0.getName())) { value.add(args0.getName()); }
+                    }
+                }
+            }
+        }
+
+        return value;
     }
 }

@@ -146,6 +146,7 @@ public class Main extends JavaPlugin
         getCommand("setwarpitem").setExecutor(new SetWarpItemCommand());
 
         getCommand("warp").setExecutor(new WarpCommand());
+        getCommand("warp").setTabCompleter(new WarpCommand());
 
     }
 

@@ -225,6 +225,16 @@ public class User
             team.addEntry(this.player.getName());
         }
 
+        try
+        {
+            Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("noCollision").setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        }
+        catch (IllegalArgumentException e) { }
+
+        Team noCollisionTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("noCollision");
+
+        noCollisionTeam.addEntry(this.player.getName());
+
         this.player.setPlayerListName(this.displayName);
     }
 
