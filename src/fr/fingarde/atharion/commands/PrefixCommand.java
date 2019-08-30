@@ -34,7 +34,7 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
             }
 
             if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if(victim == null) victim = (Player) sender;
+            if(victim == null) { victim = (Player) sender; }
 
             if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
             String prefix = "";
@@ -63,7 +63,7 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                if (!silent) victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name);
+                if (!silent) { victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name); }
             }
 
             return true;

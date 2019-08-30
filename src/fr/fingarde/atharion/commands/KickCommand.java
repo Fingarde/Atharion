@@ -38,15 +38,20 @@ public class KickCommand implements CommandExecutor, TabCompleter
 
                 for (int i = 1; i < args.length; i++)
                 {
-                    message += args[i];
+                    message +=  " " + args[i];
                 }
             }
+
+            boolean silent = false;
+            if (message.endsWith(" -s")) { silent = true ; message = message.substring(0, message.length() - 3); }
+
+            if(silent && message.length() == 0) { basicMessage = basicMessage.substring(0, basicMessage.length() - 9); }
 
             message = message.replaceAll("&", "§");
 
             victim.kickPlayer(basicMessage + message);
 
-            Bukkit.broadcastMessage("§e" + name + "§a vient d'exclure §e" + victim.getDisplayName() + ((message.length() == 0) ? "" : "§a pour §e" + message + "§a."));
+            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a vient d'exclure §e" + victim.getDisplayName() + ((message.length() == 0) ? "" : "§a pour §e" + message + "§a.")); }
 
             return true;
         }

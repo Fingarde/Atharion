@@ -37,7 +37,7 @@ public class WarpCommand implements CommandExecutor
 
             Inventory inventory = Bukkit.createInventory((Player) sender, (warpsToAddInInv.size() > 54) ? 54 : toMultipleOf9(warpsToAddInInv.size()), "  §8§lWarps");
 
-            for(Warp warp : warpsToAddInInv)
+            for (Warp warp : warpsToAddInInv)
             {
                 inventory.addItem(warp.getItem());
             }
