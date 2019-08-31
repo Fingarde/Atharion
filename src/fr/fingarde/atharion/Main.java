@@ -89,6 +89,10 @@ public class Main extends JavaPlugin
                             "  prefix TEXT NOT NULL,\n" +
                             "  suffix TEXT NOT NULL,\n" +
                             "  rank TEXT NOT NULL,\n" +
+                            "  joined_timestamp BIGINT NOT NULL,\n" +
+                            "  mute_timestamp BIGINT NOT NULL,\n" +
+                            "  jail_timestamp BIGINT NOT NULL,\n" +
+                            "  ban_timestamp BIGINT NOT NULL,\n" +
                             "  primary KEY (id)\n" +
                             ")");
 
@@ -147,6 +151,8 @@ public class Main extends JavaPlugin
 
         getCommand("warp").setExecutor(new WarpCommand());
         getCommand("warp").setTabCompleter(new WarpCommand());
+
+        getCommand("mute").setExecutor(new MuteCommand());
 
     }
 

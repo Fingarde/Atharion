@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
+
+import java.util.Date;
 
 public class ChatListener implements Listener
 {
@@ -20,6 +23,16 @@ public class ChatListener implements Listener
         if (!player.hasPermission("atharion.chat")) { Error.noPermission(player, "atharion.chat"); event.setCancelled(true); return; }
 
         User user = User.getFromUUID(player.getUniqueId());
+
+
+        if(user.getMuteTimestamp() != 0)
+        {
+            if(user.getMuteTimestamp() - new Date().getTime() > 1 || user.getMuteTimestamp() == 1)
+            {
+                // TODO WORKING HERE
+            }
+           
+        }
 
         event.setCancelled(true);
 
@@ -44,6 +57,5 @@ public class ChatListener implements Listener
       {
           onlinePlayer.sendMessage(ChatColor.WHITE + user.getDisplayName() + "§r" + ChatColor.GOLD + " > " + ChatColor.WHITE + message);
       }
-
     }
 }

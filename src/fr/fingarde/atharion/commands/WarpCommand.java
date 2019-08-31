@@ -72,9 +72,9 @@ public class WarpCommand implements CommandExecutor, TabCompleter
     }
 
     private int toMultipleOf9(int i)
-    {
-        return ((int) Math.ceil(i / (float) 9) * 9);
-    }
+{
+    return ((int) Math.ceil(i / (float) 9) * 9);
+}
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args)

@@ -11,6 +11,10 @@ import java.util.ArrayList;
 
 public class Rank
 {
+    // Ajouter default rank
+
+
+
     private String rank;
     private MemorySection data;
 

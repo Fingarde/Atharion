@@ -25,6 +25,9 @@ public class User
     private String suffix;
     private String displayName;
     private Player player;
+    private long muteTimestamp;
+    private long jailTimestamp;
+    private long banTimestamp;
 
     public User(UUID uuid)
     {
@@ -254,6 +257,90 @@ public class User
         if (this.suffix != "") { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
 
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
+    }
+
+    public long getMuteTimestamp()
+    {
+        return muteTimestamp;
+    }
+
+    public void setMuteTimestamp(long timestamp)
+    {
+        this.muteTimestamp = timestamp;
+
+        try
+        {
+            Connection connection = Main.getHikari().getConnection();
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("UPDATE Players SET mute_timestamp = '" + this.muteTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        loadName();
+        loadNameInTab();
+    }
+
+    public long getJailTimestamp()
+    {
+        return jailTimestamp;
+    }
+
+    public void setJailTimestamp(long timestamp)
+    {
+        this.jailTimestamp = timestamp;
+
+        try
+        {
+            Connection connection = Main.getHikari().getConnection();
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("UPDATE Players SET jail_timestamp = '" + this.jailTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        loadName();
+        loadNameInTab();
+    }
+
+    public long getBanTimestamp()
+    {
+        return banTimestamp;
+    }
+
+    public void setBanTimestamp(long timestamp)
+    {
+        this.banTimestamp = timestamp;
+
+        try
+        {
+            Connection connection = Main.getHikari().getConnection();
+
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("UPDATE Players SET ban_timestamp = '" + this.banTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        loadName();
+        loadNameInTab();
     }
 
     public static User getFromUUID(UUID uuid)

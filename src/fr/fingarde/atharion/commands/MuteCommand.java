@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.commands;
 
-import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.objects.User;
+import fr.fingarde.atharion.utils.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,13 +10,15 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class NickCommand implements CommandExecutor, TabCompleter
+public class MuteCommand implements CommandExecutor, TabCompleter
 {
-    String usage = "§bUsage: §r/nick §7[nick|reset] \n§r/nick §a<player> §7[nick|reset]";
-    String permission = "atharion.nick";
-    String permissionOther = "atharion.nickother";
+    String usage = "§bUsage: §r/mute §a<player> §7[time] [message]";
+    String permission = "atharion.mute";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -32,39 +34,56 @@ public class NickCommand implements CommandExecutor, TabCompleter
                 victim = Bukkit.getPlayer(args[0]);
             }
 
-            if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if(victim == null) { victim = (Player) sender; }
+            if (victim == null) { sender.sendMessage(usage); return false; }
 
-            if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
+            long unmuteAt = 1;
+            String time = "";
 
-            String nick = "";
-            for (int i = 0; i < args.length; i++)
+            String message = "";
+
+            if (args.length > 1)
             {
-                if(victim != sender && i == 0) continue;
+                for (int i = 1; i < args.length; i++)
+                {
+                    message +=  " " + args[i];
+                }
 
-                nick += " " + args[i];
+                message = message.substring(1);
+                message = message.replaceAll("&", "§");
+
+                if (args[1].contains("y") || args[1].contains("mo") || args[1].contains("d") || args[1].contains("h") || args[1].contains("m") || args[1].contains("s"))
+                {
+                    long unmuteTimestamp = getUnbanTimestamp(args[1])[0];
+
+                    if (unmuteTimestamp != 0)
+                    {
+                        unmuteAt = new Date().getTime() + unmuteTimestamp;
+
+                        if(args.length == 2) { message = ""; }
+                        else { message = message.substring(args[1].length() + 1); }
+                    }
+                }
+
+                long[] timeArray = getUnbanTimestamp(args[1]);
+
+                if(timeArray[1] != 0) time += timeArray[1] + "ans";
+                if(timeArray[2] != 0) time += timeArray[2] + "mois";
+                if(timeArray[3] != 0) time += timeArray[3] + "semaines";
+                if(timeArray[4] != 0) time += timeArray[4] + "jours";
+                if(timeArray[5] != 0) time += timeArray[5] + "heures";
+                if(timeArray[6] != 0) time += timeArray[6] + "minutes";
+                if(timeArray[7] != 0) time += timeArray[7] + "secondes";
             }
 
-            nick = nick.substring(1);
-            nick = nick.replaceAll("&", "§");
+            if(unmuteAt == 1) time = "A vie";
 
-            boolean silent = false;
-            if (nick.endsWith(" -s")) { silent = true ; nick = nick.substring(0, nick.length() - 3); }
+            if (message == "") { message = "Raison non spécifié"; }
 
-            if (nick.equalsIgnoreCase("reset")) { nick = ""; }
+            sender.sendMessage("§e" + victim.getDisplayName() + "§a a été mute §e" + time + "§a pour §e" + message);
+
             User user = User.getFromUUID(victim.getUniqueId());
 
-            sender.sendMessage("§aLe surnom de §e" + victim.getDisplayName() + "§a a été défini sur §e" + nick + "§a.");
-
-            user.setNickname(nick);
-
-            if (victim != sender)
-            {
-                String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
-
-                if (!silent) { victim.sendMessage("§aVotre surnom a été défini sur §e" + nick + "§a par §e" + name); }
-            }
-
+            user.setMuteTimestamp(unmuteAt);
             return true;
         }
         else
@@ -72,6 +91,43 @@ public class NickCommand implements CommandExecutor, TabCompleter
             sender.sendMessage(usage);
             return false;
         }
+    }
+
+    private long[] getUnbanTimestamp(String arg)
+    {
+        int years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+
+        Matcher mat = Pattern.compile("\\d{1,}y").matcher(arg);
+        if (mat.find()) { years = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
+
+        mat = Pattern.compile("\\d{1,}mo").matcher(arg);
+        if (mat.find()) { months = Integer.parseInt(mat.group().substring(0, mat.group().length() - 2)); }
+
+        mat = Pattern.compile("\\d{1,}w").matcher(arg);
+        if (mat.find()) { weeks = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
+
+        mat = Pattern.compile("\\d{1,}d").matcher(arg);
+        if (mat.find()) { days = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
+
+        mat = Pattern.compile("\\d{1,}h").matcher(arg);
+        if (mat.find()) { hours = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
+
+        mat = Pattern.compile("\\d{1,}m").matcher(arg);
+
+        if(months != 0) { mat.find(); }
+        if (mat.find()) { minutes = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
+
+
+        mat = Pattern.compile("\\d{1,}s").matcher(arg);
+        if(mat.find()) seconds = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)) ;
+
+        long totalMonths = years * 12;
+        long totalDays = ((totalMonths + months) * 30) + (weeks * 7) + days;
+        long totalHours = (totalDays * 24) + hours;
+        long totalMinutes = (totalHours * 60) + minutes;
+        long totalSeconds = (totalMinutes * 60) + seconds;
+
+        return new long[] { (totalSeconds * 1000), years, months, weeks, days, hours, minutes, seconds };
     }
 
     @Override
@@ -88,8 +144,6 @@ public class NickCommand implements CommandExecutor, TabCompleter
             {
                 args0Completer.add(onlinePlayer.getName());
             }
-
-            args0Completer.add("RESET");
 
             if (args[0].length() == 0)
             {
