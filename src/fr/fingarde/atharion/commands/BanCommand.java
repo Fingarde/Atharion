@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MuteCommand implements CommandExecutor, TabCompleter
+public class BanCommand implements CommandExecutor, TabCompleter
 {
     String usage = "§bUsage: §r/mute §a<player> §7[time] [message]";
     String permission = "atharion.mute";
@@ -36,10 +36,12 @@ public class MuteCommand implements CommandExecutor, TabCompleter
 
             if (victim == null) { sender.sendMessage(usage); return false; }
 
-            long unmuteAt = 1;
+            long unbanAt = 1;
             String time = "";
 
             String message = "";
+
+            boolean silent = false;
 
             if (args.length > 1)
             {
@@ -51,13 +53,15 @@ public class MuteCommand implements CommandExecutor, TabCompleter
                 message = message.substring(1);
                 message = message.replaceAll("&", "§");
 
+                if (message.endsWith(" -s")) { silent = true ; message = message.substring(0, message.length() - 3); }
+
                 if (args[1].contains("y") || args[1].contains("mo") || args[1].contains("d") || args[1].contains("h") || args[1].contains("m") || args[1].contains("s"))
                 {
                     long timeMute = getTimeMute(args[1])[0];
 
                     if (timeMute != 0)
                     {
-                        unmuteAt = new Date().getTime() + timeMute;
+                        unbanAt = new Date().getTime() + timeMute;
 
                         if(args.length == 2) { message = ""; }
                         else { message = message.substring(args[1].length() + 1); }
@@ -66,27 +70,27 @@ public class MuteCommand implements CommandExecutor, TabCompleter
 
                 long[] timeArray = getTimeMute(args[1]);
 
-                if (timeArray[1] != 0) time += timeArray[1] + "ans ";
+                if (timeArray[1] != 0) time += timeArray[1] + ((timeArray[1] == 1) ? "an " : "ans ");
                 if (timeArray[2] != 0) time += timeArray[2] + "mois ";
-                if (timeArray[3] != 0) time += timeArray[3] + "semaines ";
-                if (timeArray[4] != 0) time += timeArray[4] + "jours ";
-                if (timeArray[5] != 0) time += timeArray[5] + "heures ";
-                if (timeArray[6] != 0) time += timeArray[6] + "minutes ";
-                if (timeArray[7] != 0) time += timeArray[7] + "secondes ";
+                if (timeArray[3] != 0) time += timeArray[3] + ((timeArray[3] == 1) ? "semaine " : "semaines ");
+                if (timeArray[4] != 0) time += timeArray[4] + ((timeArray[4] == 1) ? "jour " : "jours ");
+                if (timeArray[5] != 0) time += timeArray[5] + ((timeArray[5] == 1) ? "heure " : "heures ");
+                if (timeArray[6] != 0) time += timeArray[6] + ((timeArray[6] == 1) ? "minute " : "minutes ");
+                if (timeArray[7] != 0) time += timeArray[7] + ((timeArray[7] == 1) ? "seconde " : "secondes ");
             }
 
-            if(unmuteAt == 1) time = "A vie ";
+            if(unbanAt == 1) time = "A vie ";
 
             if (message == "") { message = "Raison non spécifié"; }
 
             User user = User.getFromUUID(victim.getUniqueId());
-            user.setMuteTimestamp(unmuteAt);
+            user.setBanTimestamp(unbanAt);
 
             String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
-            sender.sendMessage("§e" + name + "§a vous a rendu au silence §e" + time + "§apour §e" + message);
 
-            // TODO ADD SILENT then broadcast mesage
+            victim.kickPlayer("§e" + name + "§a vous a banni d'Atharion\n§e" + time + "\n§apour\n§e" + message);
 
+            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a banni §e" + victim.getDisplayName() + "§a, " + time + "§apour §e" + message); }
             return true;
         }
         else

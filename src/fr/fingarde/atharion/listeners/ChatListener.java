@@ -2,6 +2,7 @@ package fr.fingarde.atharion.listeners;
 
 import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.objects.User;
+import fr.fingarde.atharion.utils.TimestampConverter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -20,21 +21,37 @@ public class ChatListener implements Listener
     {
         Player player = event.getPlayer();
 
-        if (!player.hasPermission("atharion.chat")) { Error.noPermission(player, "atharion.chat"); event.setCancelled(true); return; }
+        event.setCancelled(true);
+
+        if (!player.hasPermission("atharion.chat")) { Error.noPermission(player, "atharion.chat"); return; }
 
         User user = User.getFromUUID(player.getUniqueId());
 
-
         if(user.getMuteTimestamp() != 0)
         {
-            if(user.getMuteTimestamp() - new Date().getTime() > 1 || user.getMuteTimestamp() == 1)
-            {
-                // TODO WORKING HERE
-            }
-           
-        }
 
-        event.setCancelled(true);
+            if(user.getMuteTimestamp() != 1 && user.getMuteTimestamp() - new Date().getTime() < 0)
+            {
+                user.setMuteTimestamp(0);
+                user.loadNameInTab();
+            }
+            else if(user.getMuteTimestamp() - new Date().getTime() > 1 || user.getMuteTimestamp() == 1)
+            {
+                String messageRefused = "";
+
+                if(user.getMuteTimestamp() == 1)
+                {
+                    messageRefused = "§cVous avez été réduit au silence, veuillez contacter un modérateur sur discord §ehttps://discord.gg/KeSFqmE";
+                }
+                else
+                {
+                    messageRefused = "§cVous avez été réduit au silence pendant §e" + TimestampConverter.getTime(user.getMuteTimestamp() - new Date().getTime());
+                }
+
+                player.sendMessage(messageRefused);
+                return;
+            }
+        }
 
         String message = event.getMessage().replaceAll("&", "§");
 

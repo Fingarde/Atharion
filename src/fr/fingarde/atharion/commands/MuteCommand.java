@@ -41,6 +41,8 @@ public class MuteCommand implements CommandExecutor, TabCompleter
 
             String message = "";
 
+            boolean silent = false;
+
             if (args.length > 1)
             {
                 for (int i = 1; i < args.length; i++)
@@ -51,39 +53,44 @@ public class MuteCommand implements CommandExecutor, TabCompleter
                 message = message.substring(1);
                 message = message.replaceAll("&", "§");
 
+                if (message.endsWith(" -s")) { silent = true ; message = message.substring(0, message.length() - 3); }
+
                 if (args[1].contains("y") || args[1].contains("mo") || args[1].contains("d") || args[1].contains("h") || args[1].contains("m") || args[1].contains("s"))
                 {
-                    long unmuteTimestamp = getUnbanTimestamp(args[1])[0];
+                    long timeMute = getTimeMute(args[1])[0];
 
-                    if (unmuteTimestamp != 0)
+                    if (timeMute != 0)
                     {
-                        unmuteAt = new Date().getTime() + unmuteTimestamp;
+                        unmuteAt = new Date().getTime() + timeMute;
 
                         if(args.length == 2) { message = ""; }
                         else { message = message.substring(args[1].length() + 1); }
                     }
                 }
 
-                long[] timeArray = getUnbanTimestamp(args[1]);
+                long[] timeArray = getTimeMute(args[1]);
 
-                if(timeArray[1] != 0) time += timeArray[1] + "ans";
-                if(timeArray[2] != 0) time += timeArray[2] + "mois";
-                if(timeArray[3] != 0) time += timeArray[3] + "semaines";
-                if(timeArray[4] != 0) time += timeArray[4] + "jours";
-                if(timeArray[5] != 0) time += timeArray[5] + "heures";
-                if(timeArray[6] != 0) time += timeArray[6] + "minutes";
-                if(timeArray[7] != 0) time += timeArray[7] + "secondes";
+                if (timeArray[1] != 0) time += timeArray[1] + ((timeArray[1] == 1) ? "an " : "ans ");
+                if (timeArray[2] != 0) time += timeArray[2] + "mois ";
+                if (timeArray[3] != 0) time += timeArray[3] + ((timeArray[3] == 1) ? "semaine " : "semaines ");
+                if (timeArray[4] != 0) time += timeArray[4] + ((timeArray[4] == 1) ? "jour " : "jours ");
+                if (timeArray[5] != 0) time += timeArray[5] + ((timeArray[5] == 1) ? "heure " : "heures ");
+                if (timeArray[6] != 0) time += timeArray[6] + ((timeArray[6] == 1) ? "minute " : "minutes ");
+                if (timeArray[7] != 0) time += timeArray[7] + ((timeArray[7] == 1) ? "seconde " : "secondes ");
             }
 
-            if(unmuteAt == 1) time = "A vie";
+            if(unmuteAt == 1) time = "A vie ";
 
             if (message == "") { message = "Raison non spécifié"; }
 
-            sender.sendMessage("§e" + victim.getDisplayName() + "§a a été mute §e" + time + "§a pour §e" + message);
-
             User user = User.getFromUUID(victim.getUniqueId());
-
             user.setMuteTimestamp(unmuteAt);
+            user.loadNameInTab();
+
+            String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
+            sender.sendMessage("§e" + name + "§a vous a rendu au silence §e" + time + "§apour §e" + message);
+
+            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a rendu §e" + victim.getDisplayName() + "§a au silence §e" + time + "§apour §e" + message); }
             return true;
         }
         else
@@ -93,7 +100,7 @@ public class MuteCommand implements CommandExecutor, TabCompleter
         }
     }
 
-    private long[] getUnbanTimestamp(String arg)
+    private long[] getTimeMute(String arg)
     {
         int years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
 
@@ -116,7 +123,6 @@ public class MuteCommand implements CommandExecutor, TabCompleter
 
         if(months != 0) { mat.find(); }
         if (mat.find()) { minutes = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)); }
-
 
         mat = Pattern.compile("\\d{1,}s").matcher(arg);
         if(mat.find()) seconds = Integer.parseInt(mat.group().substring(0, mat.group().length() - 1)) ;

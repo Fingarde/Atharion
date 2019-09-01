@@ -3,6 +3,7 @@ package fr.fingarde.atharion.listeners;
 import fr.fingarde.atharion.Main;
 import fr.fingarde.atharion.objects.User;
 import fr.fingarde.atharion.objects.Warp;
+import fr.fingarde.atharion.utils.TimestampConverter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 
 public class ConnectionListerner implements Listener
 {
@@ -38,13 +40,39 @@ public class ConnectionListerner implements Listener
 
             if(!result.next())
             {
-                statement.executeUpdate("INSERT INTO Players (uuid, rank, nickname, prefix, suffix) VALUES ('" + player.getUniqueId().toString() + "', 'visiteur', '', '', '')");
+                statement.executeUpdate("INSERT INTO Players (uuid, rank, nickname, prefix, suffix, joined_timestamp, muted_timestamp, jailed_timestamp, banned_timestamp) VALUES ('" + player.getUniqueId().toString() + "', 'visiteur', '', '', '', '" + new Date().getTime() + "', '0', '0', '0')");
 
                 statement.close();
                 connection.close();
             }
 
             User user = new User(player.getUniqueId());
+
+            if(user.getBanTimestamp() != 0)
+            {
+
+                if(user.getBanTimestamp() != 1 && user.getBanTimestamp() - new Date().getTime() < 0)
+                {
+                    user.setBanTimestamp(0);
+
+                }
+                else if(user.getBanTimestamp() - new Date().getTime() > 1 || user.getBanTimestamp() == 1)
+                {
+                    String messageRefused = "";
+
+                    if(user.getBanTimestamp() == 1)
+                    {
+                        messageRefused = "§cVous avez été réduit au silence, veuillez contacter un modérateur sur discord §ehttps://discord.gg/KeSFqmE";
+                    }
+                    else
+                    {
+                        messageRefused = "§cVous avez été réduit au silence pendant §e" + TimestampConverter.getTime(user.getMuteTimestamp() - new Date().getTime());
+                    }
+
+                    player.kickPlayer(messageRefused);
+                    return;
+                }
+            }
 
             user.loadNameInTab();
             user.loadPermissions();

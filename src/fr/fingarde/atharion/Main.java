@@ -85,14 +85,14 @@ public class Main extends JavaPlugin
                     "CREATE TABLE IF NOT EXISTS Players(\n" +
                             "  id MEDIUMINT NOT NULL AUTO_INCREMENT,\n" +
                             "  uuid TEXT NOT NULL,\n" +
+                            "  rank TEXT NOT NULL,\n" +
                             "  nickname TEXT NOT NULL,\n" +
                             "  prefix TEXT NOT NULL,\n" +
                             "  suffix TEXT NOT NULL,\n" +
-                            "  rank TEXT NOT NULL,\n" +
                             "  joined_timestamp BIGINT NOT NULL,\n" +
-                            "  mute_timestamp BIGINT NOT NULL,\n" +
-                            "  jail_timestamp BIGINT NOT NULL,\n" +
-                            "  ban_timestamp BIGINT NOT NULL,\n" +
+                            "  muted_timestamp BIGINT NOT NULL,\n" +
+                            "  jailed_timestamp BIGINT NOT NULL,\n" +
+                            "  banned_timestamp BIGINT NOT NULL,\n" +
                             "  primary KEY (id)\n" +
                             ")");
 
@@ -153,6 +153,10 @@ public class Main extends JavaPlugin
         getCommand("warp").setTabCompleter(new WarpCommand());
 
         getCommand("mute").setExecutor(new MuteCommand());
+        getCommand("mute").setTabCompleter(new MuteCommand());
+
+        getCommand("ban").setExecutor(new BanCommand());
+        getCommand("ban").setTabCompleter(new BanCommand());
 
     }
 

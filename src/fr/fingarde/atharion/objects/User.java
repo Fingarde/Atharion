@@ -25,6 +25,7 @@ public class User
     private String suffix;
     private String displayName;
     private Player player;
+    private long joinTimestamp;
     private long muteTimestamp;
     private long jailTimestamp;
     private long banTimestamp;
@@ -47,6 +48,12 @@ public class User
             this.nickname = result.getString("nickname");
             this.prefix = result.getString("prefix");
             this.suffix = result.getString("suffix");
+
+            this.joinTimestamp = result.getLong("joined_timestamp");
+
+            this.muteTimestamp = result.getLong("muted_timestamp");
+            this.jailTimestamp = result.getLong("jailed_timestamp");
+            this.banTimestamp = result.getLong("banned_timestamp");
 
             this.player = Bukkit.getPlayer(this.uuid);
 
@@ -238,7 +245,7 @@ public class User
 
         noCollisionTeam.addEntry(this.player.getName());
 
-        this.player.setPlayerListName(this.displayName);
+        this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7] " : " ") + this.displayName);
     }
 
 
@@ -259,6 +266,11 @@ public class User
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
     }
 
+    public long getJoinTimestamp()
+    {
+        return joinTimestamp;
+    }
+
     public long getMuteTimestamp()
     {
         return muteTimestamp;
@@ -274,7 +286,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET mute_timestamp = '" + this.muteTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET muted_timestamp = '" + this.muteTimestamp + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
@@ -302,7 +314,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET jail_timestamp = '" + this.jailTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET jailed_timestamp = '" + this.jailTimestamp + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
@@ -330,7 +342,7 @@ public class User
 
             Statement statement = connection.createStatement();
 
-            statement.executeUpdate("UPDATE Players SET ban_timestamp = '" + this.banTimestamp + "' WHERE uuid = '" + this.uuid + "'");
+            statement.executeUpdate("UPDATE Players SET banned_timestamp = '" + this.banTimestamp + "' WHERE uuid = '" + this.uuid + "'");
 
             statement.close();
             connection.close();
