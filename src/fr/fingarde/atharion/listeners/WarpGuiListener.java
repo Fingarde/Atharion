@@ -14,13 +14,15 @@ public class WarpGuiListener implements Listener
         {
             event.setCancelled(true);
 
+            if(!event.getClick().isLeftClick()) return;
+
             for(Warp warp : Warp.warps)
             {
-                if(warp.getItem() == event.getCurrentItem())
+                if(warp.getItem().getItemMeta().getDisplayName().equals(event.getCurrentItem().getItemMeta().getDisplayName()))
                 {
                     event.getWhoClicked().teleport(warp.getLocation());
                     event.getWhoClicked().sendMessage("§aTéléportation vers §e" + warp.getName());
-                    break;
+                    return;
                 }
             }
         }
