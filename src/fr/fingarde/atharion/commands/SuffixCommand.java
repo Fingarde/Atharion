@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SuffixCommand implements CommandExecutor, TabCompleter
 {
-    String usage = "§bUsage: §r/suffix §7[suffix|reset] \n§r/suffix §a<player> §7[suffix|reset]";
+    String usage = "§bUsage: §r/suffix §a<suffix|reset> \n§r/suffix §a<player> §7[suffix|reset]";
     String permission = "atharion.suffix";
     String permissionOther = "atharion.suffixother";
 

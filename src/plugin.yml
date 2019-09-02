@@ -45,3 +45,5 @@ commands:
     aliases:
       - pardon
     description: Moderation command
+  spawn:
+    description: Teleport player to spawn

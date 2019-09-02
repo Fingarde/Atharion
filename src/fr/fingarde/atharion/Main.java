@@ -164,6 +164,9 @@ public class Main extends JavaPlugin
         getCommand("unban").setExecutor(new UnbanCommand());
         getCommand("unban").setTabCompleter(new UnbanCommand());
 
+        getCommand("spawn").setExecutor(new SpawnCommand());
+        getCommand("spawn").setTabCompleter(new SpawnCommand());
+
     }
 
     private void registerListeners()
@@ -179,8 +182,8 @@ public class Main extends JavaPlugin
         {
             User user = new User(onlinePlayer.getUniqueId());
 
-            user.loadName();
             user.loadPermissions();
+            user.loadName();
             user.loadNameInTab();
 
             User.users.add(user);

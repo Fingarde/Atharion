@@ -19,6 +19,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter
 {
     String usage = "§bUsage: §r/warp §a<nom>";
     String permission = "atharion.warp";
+    String permissionOther = "atharion.warpother";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -26,7 +27,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter
         if(args.length == 0)
         {
             if (!(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-            if (!sender.hasPermission(permission + ".opengui") && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + ".opengui"); return false; }
+            if (!sender.hasPermission(permission + "opengui") && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + ".opengui"); return false; }
 
             ArrayList<Warp> warpsToAddInInv = new ArrayList<>();//
 
@@ -49,17 +50,43 @@ public class WarpCommand implements CommandExecutor, TabCompleter
 
             return true;
         }
-        else if (args.length == 1)
+        else if (args.length == 1 || args.length == 2)
         {
-            if (!(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
-
             if (Warp.getByName(args[0]) == null) { sender.sendMessage(usage); return false; }
 
             if (!sender.hasPermission(permission + "." + args[0]) && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + "." + args[0].toLowerCase()); return false; }
 
             Location location = Warp.getByName(args[0]).getLocation();
 
-            ((Player) sender).teleport(location);
+            Player victim = null;
+
+
+            if(args.length == 2)
+            {
+                if (Bukkit.getPlayer(args[1]) != null)
+                {
+                    victim = Bukkit.getPlayer(args[1]);
+                }
+            }
+
+            if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
+            if(victim == null) { victim = (Player) sender; }
+
+            if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
+
+            victim.teleport(location);
+
+            if (victim != sender)
+            {
+                String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
+
+                sender.sendMessage("§aTeleportation de §e" + victim.getDisplayName() + "§a vers §e" + Warp.getByName(args[0]).getName());
+                victim.sendMessage("§e" + name + "§a vous a téléporté vers §e" + Warp.getByName(args[0]).getName());
+            }
+            else
+            {
+                sender.sendMessage("§aTeleportation vers §e" + Warp.getByName(args[0]).getName());
+            }
 
             return true;
         }
@@ -100,6 +127,29 @@ public class WarpCommand implements CommandExecutor, TabCompleter
                     if (args0.getName().toLowerCase().startsWith(args[0].toLowerCase()))
                     {
                         if(sender.hasPermission(permission + "." + args0.getName())) { value.add(args0.getName()); }
+                    }
+                }
+            }
+        }
+        else if (args.length == 2)
+        {
+            value = new ArrayList<>();
+            Collection<? extends Player> args1Completer = Bukkit.getOnlinePlayers();
+
+            if (args[1].length() == 0)
+            {
+                for(Player args1 : args1Completer)
+                {
+                    value.add(args1.getName());
+                }
+            }
+            else
+            {
+                for (Player args1 : args1Completer)
+                {
+                    if (args1.getName().toLowerCase().startsWith(args[1].toLowerCase()))
+                    {
+                        value.add(args1.getName());
                     }
                 }
             }

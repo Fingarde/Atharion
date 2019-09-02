@@ -14,7 +14,7 @@ import java.util.List;
 
 public class NickCommand implements CommandExecutor, TabCompleter
 {
-    String usage = "§bUsage: §r/nick §7[nick|reset] \n§r/nick §a<player> §7[nick|reset]";
+    String usage = "§bUsage: §r/nick §a<nick|reset> \n§r/nick §a<player> §7[nick|reset]";
     String permission = "atharion.nick";
     String permissionOther = "atharion.nickother";
 

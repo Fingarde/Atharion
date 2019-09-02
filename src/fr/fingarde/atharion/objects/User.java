@@ -247,16 +247,16 @@ public class User
     public void loadName()
     {
         this.player.setDisplayName(this.player.getName());
-        if (this.nickname != "") { this.player.setDisplayName(this.nickname); }
+        if (this.nickname != "" && this.player.hasPermission("havenickname")) { this.player.setDisplayName(this.nickname); }
 
         String localPrefix = "";
         String localSuffix = "";
 
         if (this.rank.getPrefix() != null) { localPrefix = this.rank.getPrefix() + " " + "§r"; }
-        if (this.rank.getSuffix()!= null) { localSuffix =  "§r" + " " + this.rank.getSuffix(); }
+        if (this.rank.getSuffix() != null) { localSuffix =  "§r" + " " + this.rank.getSuffix(); }
 
-        if (this.prefix != "") { localPrefix = ((this.prefix.length() == 2 && this.prefix.startsWith("§")) ? this.prefix : (this.prefix + " ")) + "§r"; }
-        if (this.suffix != "") { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
+        if (this.prefix != "" && this.player.hasPermission("haveprefix")) { localPrefix = ((this.prefix.length() == 2 && this.prefix.startsWith("§")) ? this.prefix : (this.prefix + " ")) + "§r"; }
+        if (this.suffix != "" && this.player.hasPermission("havesuffix")) { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
 
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
     }

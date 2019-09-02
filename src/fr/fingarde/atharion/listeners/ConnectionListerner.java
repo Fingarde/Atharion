@@ -77,8 +77,8 @@ public class ConnectionListerner implements Listener
                 }
             }
 
-            user.loadName();
             user.loadPermissions();
+            user.loadName();
             user.loadNameInTab();
 
             event.setJoinMessage(user.getDisplayName() + "§a a rejoint §e§lAtharion");

@@ -1,5 +1,6 @@
 package fr.fingarde.atharion.commands;
 
+import fr.fingarde.atharion.objects.Warp;
 import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.objects.User;
 import org.bukkit.Bukkit;
@@ -12,58 +13,49 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrefixCommand implements CommandExecutor, TabCompleter
+public class SpawnCommand implements CommandExecutor, TabCompleter
 {
-    String usage = "§bUsage: §r/prefix §a<prefix|reset> \n§r/prefix §a<player> §7[prefix|reset]";
-    String permission = "atharion.prefix";
-    String permissionOther = "atharion.prefixother";
+    String usage = "§bUsage: §r/spawn §a<player>";
+    String permission = "atharion.spawn";
+    String permissionOther = "atharion.spawnother";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (args.length >= 1)
+        if (args.length <= 1)
         {
-
             if (!sender.hasPermission(permission)) { Error.noPermission(sender, permission); return false; }
 
             Player victim = null;
 
-            if (Bukkit.getPlayer(args[0]) != null)
+            if(args.length == 1)
             {
-                victim = Bukkit.getPlayer(args[0]);
+                if (Bukkit.getPlayer(args[0]) != null)
+                {
+                    victim = Bukkit.getPlayer(args[0]);
+                }
             }
 
             if(victim == null && !(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
             if(victim == null) { victim = (Player) sender; }
 
             if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
-            String prefix = "";
-            for (int i = 0; i < args.length; i++)
-            {
-                if(victim != sender && i == 0) continue;
 
-                prefix += " " + args[i];
-            }
+            if(Warp.getByName("Spawn") == null) { sender.sendMessage("§aLe spawn n'a pas été defini"); return false; }
 
-            prefix = prefix.substring(1);
-            prefix = prefix.replaceAll("&", "§");
+            victim.teleport(Warp.getByName("Spawn").getLocation());
 
-            boolean silent = false;
-            if (prefix.endsWith(" -s")) { silent = true ; prefix = prefix.substring(0, prefix.length() - 3); }
-
-
-            if (prefix.equalsIgnoreCase("reset")) { prefix = ""; }
-            User user = User.getFromUUID(victim.getUniqueId());
-
-            sender.sendMessage("§aLe préfix de §e" + victim.getDisplayName() + "§a a été défini sur §e" + prefix + "§a.");
-
-            user.setPrefix(prefix);
 
             if (victim != sender)
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                if (!silent) { victim.sendMessage("§aVotre préfix a été défini sur §e" + prefix + "§a par §e" + name); }
+                sender.sendMessage("§aTeleportation de §e" + victim.getDisplayName() + "§a vers §espawn");
+                victim.sendMessage("§e" + name + "§a vous a téléporté vers §espawn");
+            }
+            else
+            {
+                sender.sendMessage("§aTeleportation vers §espawn");
             }
 
             return true;
@@ -89,8 +81,6 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
             {
                 args0Completer.add(onlinePlayer.getName());
             }
-
-            args0Completer.add("RESET");
 
             if (args[0].length() == 0)
             {
