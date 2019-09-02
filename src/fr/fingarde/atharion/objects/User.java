@@ -57,13 +57,8 @@ public class User
 
             this.player = Bukkit.getPlayer(this.uuid);
 
-            loadName();
-            loadNameInTab();
-
             statement.close();
             connection.close();
-
-            users.add(this);
         }
         catch (SQLException e)
         {
@@ -245,11 +240,11 @@ public class User
 
         noCollisionTeam.addEntry(this.player.getName());
 
-        this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7] " : " ") + this.displayName);
+        this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7]" : "") + this.displayName);
     }
 
 
-    private void loadName()
+    public void loadName()
     {
         this.player.setDisplayName(this.player.getName());
         if (this.nickname != "") { this.player.setDisplayName(this.nickname); }
@@ -294,9 +289,6 @@ public class User
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        loadName();
-        loadNameInTab();
     }
 
     public long getJailTimestamp()
@@ -322,9 +314,6 @@ public class User
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        loadName();
-        loadNameInTab();
     }
 
     public long getBanTimestamp()
@@ -350,9 +339,6 @@ public class User
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        loadName();
-        loadNameInTab();
     }
 
     public static User getFromUUID(UUID uuid)

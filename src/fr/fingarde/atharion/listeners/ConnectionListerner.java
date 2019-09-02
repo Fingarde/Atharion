@@ -4,6 +4,7 @@ import fr.fingarde.atharion.Main;
 import fr.fingarde.atharion.objects.User;
 import fr.fingarde.atharion.objects.Warp;
 import fr.fingarde.atharion.utils.TimestampConverter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -47,6 +48,7 @@ public class ConnectionListerner implements Listener
             }
 
             User user = new User(player.getUniqueId());
+            User.users.add(user);
 
             if(user.getBanTimestamp() != 0)
             {
@@ -58,24 +60,26 @@ public class ConnectionListerner implements Listener
                 }
                 else if(user.getBanTimestamp() - new Date().getTime() > 1 || user.getBanTimestamp() == 1)
                 {
-                    String messageRefused = "";
+                    String messageRefused;
 
                     if(user.getBanTimestamp() == 1)
                     {
-                        messageRefused = "§cVous avez été réduit au silence, veuillez contacter un modérateur sur discord §ehttps://discord.gg/KeSFqmE";
+                        messageRefused = "§cVous avez été banni\nveuillez contacter un modérateur sur discord\n§ehttps://discord.gg/KeSFqmE";
                     }
                     else
                     {
-                        messageRefused = "§cVous avez été réduit au silence pendant §e" + TimestampConverter.getTime(user.getMuteTimestamp() - new Date().getTime());
+                        messageRefused = "§cVous avez été banni\n§e" + TimestampConverter.getTime(user.getBanTimestamp() - new Date().getTime());
                     }
 
+                    Bukkit.broadcastMessage(player.getName() + " tried to join but he was banned");
                     player.kickPlayer(messageRefused);
                     return;
                 }
             }
 
-            user.loadNameInTab();
+            user.loadName();
             user.loadPermissions();
+            user.loadNameInTab();
 
             event.setJoinMessage(user.getDisplayName() + "§a a rejoint §e§lAtharion");
         }
@@ -89,9 +93,10 @@ public class ConnectionListerner implements Listener
     public void onQuit(PlayerQuitEvent event)
     {
         Player player = event.getPlayer();
+
         User user = User.getFromUUID(player.getUniqueId());
 
-        event.setQuitMessage(user.getDisplayName() + "§c a quitté §e§lAtharion");
+        event.setQuitMessage(player.getDisplayName() + "§c a quitté §e§lAtharion");
 
         User.users.remove(user);
     }

@@ -155,8 +155,14 @@ public class Main extends JavaPlugin
         getCommand("mute").setExecutor(new MuteCommand());
         getCommand("mute").setTabCompleter(new MuteCommand());
 
+        getCommand("unmute").setExecutor(new UnmuteCommand());
+        getCommand("unmute").setTabCompleter(new UnmuteCommand());
+
         getCommand("ban").setExecutor(new BanCommand());
         getCommand("ban").setTabCompleter(new BanCommand());
+
+        getCommand("unban").setExecutor(new UnbanCommand());
+        getCommand("unban").setTabCompleter(new UnbanCommand());
 
     }
 
@@ -173,8 +179,11 @@ public class Main extends JavaPlugin
         {
             User user = new User(onlinePlayer.getUniqueId());
 
+            user.loadName();
             user.loadPermissions();
             user.loadNameInTab();
+
+            User.users.add(user);
         }
     }
 

@@ -85,12 +85,15 @@ public class MuteCommand implements CommandExecutor, TabCompleter
 
             User user = User.getFromUUID(victim.getUniqueId());
             user.setMuteTimestamp(unmuteAt);
+            user.loadName();
             user.loadNameInTab();
 
             String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
-            sender.sendMessage("§e" + name + "§a vous a rendu au silence §e" + time + "§apour §e" + message);
+            victim.sendMessage("§e" + name + "§a vous a rendu au silence §e" + time + "§apour §e" + message + "§a.");
 
-            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a rendu §e" + victim.getDisplayName() + "§a au silence §e" + time + "§apour §e" + message); }
+            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a rendu §e" + victim.getDisplayName() + "§a au silence §e" + time + "§apour §e" + message + "§a."); }
+            else { sender.sendMessage("§aVous avez rendu au silence §e" + victim.getDisplayName() + ", " + time + "§apour §e" + message + "§a."); }
+
             return true;
         }
         else

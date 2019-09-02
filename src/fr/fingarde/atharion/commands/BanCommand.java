@@ -3,6 +3,7 @@ package fr.fingarde.atharion.commands;
 import fr.fingarde.atharion.objects.User;
 import fr.fingarde.atharion.utils.Error;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,11 +28,14 @@ public class BanCommand implements CommandExecutor, TabCompleter
         {
             if (!sender.hasPermission(permission)) { Error.noPermission(sender, permission); return false; }
 
-            Player victim = null;
+            OfflinePlayer victim = null;
 
-            if (Bukkit.getPlayer(args[0]) != null)
+            for(OfflinePlayer player : Bukkit.getOfflinePlayers())
             {
-                victim = Bukkit.getPlayer(args[0]);
+                if (player.getName().equalsIgnoreCase(args[0]))
+                {
+                    victim = player;
+                }
             }
 
             if (victim == null) { sender.sendMessage(usage); return false; }
@@ -40,6 +44,7 @@ public class BanCommand implements CommandExecutor, TabCompleter
             String time = "";
 
             String message = "";
+
 
             boolean silent = false;
 
@@ -83,14 +88,16 @@ public class BanCommand implements CommandExecutor, TabCompleter
 
             if (message == "") { message = "Raison non spécifié"; }
 
-            User user = User.getFromUUID(victim.getUniqueId());
+            User user = ((victim.isOnline()) ? User.getFromUUID(victim.getUniqueId()) : new User(victim.getUniqueId()));
             user.setBanTimestamp(unbanAt);
 
             String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-            victim.kickPlayer("§e" + name + "§a vous a banni d'Atharion\n§e" + time + "\n§apour\n§e" + message);
+            if(victim.isOnline()) ((Player) victim).kickPlayer("§e" + name + "§a vous a banni d'Atharion\n§e" + time + "\n§apour\n§e" + message);
 
-            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a banni §e" + victim.getDisplayName() + "§a, " + time + "§apour §e" + message); }
+            if (!silent) { Bukkit.broadcastMessage("§e" + name + "§a a banni §e" + ((victim.isOnline()) ? ((Player) victim).getDisplayName() : victim.getName()) + "§a, §e" + time + "§apour §e" + message + "§a."); }
+            else { sender.sendMessage("§aVous avez banni §e" + ((victim.isOnline()) ? ((Player) victim).getDisplayName() : victim.getName()) + "§a, §e" + time + "§apour §e" + message + "§a."); }
+
             return true;
         }
         else
