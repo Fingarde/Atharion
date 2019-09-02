@@ -2,9 +2,7 @@ package fr.fingarde.atharion;
 
 import com.zaxxer.hikari.HikariDataSource;
 import fr.fingarde.atharion.commands.*;
-import fr.fingarde.atharion.listeners.ChatListener;
-import fr.fingarde.atharion.listeners.ConnectionListerner;
-import fr.fingarde.atharion.listeners.ProtectionListener;
+import fr.fingarde.atharion.listeners.*;
 import fr.fingarde.atharion.objects.User;
 import fr.fingarde.atharion.objects.Warp;
 import org.bukkit.Bukkit;
@@ -147,7 +145,13 @@ public class Main extends JavaPlugin
         getCommand("item").setTabCompleter(new ItemCommand());
 
         getCommand("createwarp").setExecutor(new CreateWarpCommand());
+
+        getCommand("deletewarp").setExecutor(new DeleteWarpCommand());
+        getCommand("deletewarp").setTabCompleter(new DeleteWarpCommand());
+
         getCommand("setwarpitem").setExecutor(new SetWarpItemCommand());
+        getCommand("setwarpitem").setTabCompleter(new SetWarpItemCommand());
+
 
         getCommand("warp").setExecutor(new WarpCommand());
         getCommand("warp").setTabCompleter(new WarpCommand());
@@ -174,6 +178,8 @@ public class Main extends JavaPlugin
         getServer().getPluginManager().registerEvents(new ConnectionListerner(), this);
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new ProtectionListener(), this);
+        getServer().getPluginManager().registerEvents(new PortalListener(), this);
+        getServer().getPluginManager().registerEvents(new WarpGuiListener(), this);
     }
 
     private void restorePlayers()

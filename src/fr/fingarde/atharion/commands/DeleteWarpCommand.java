@@ -3,8 +3,8 @@ package fr.fingarde.atharion.commands;
 import fr.fingarde.atharion.Main;
 import fr.fingarde.atharion.objects.Warp;
 import fr.fingarde.atharion.utils.Error;
-import fr.fingarde.atharion.utils.ItemSerializer;
-import org.bukkit.Material;
+import fr.fingarde.atharion.utils.LocationSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,12 +15,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-public class SetWarpItemCommand implements CommandExecutor, TabCompleter
+public class DeleteWarpCommand implements CommandExecutor, TabCompleter
 {
-    String usage = "§bUsage: §r/setwarpitem §a<nom>";
-    String permission = "atharion.setwarpitem";
+    String usage = "§bUsage: §r/deletewarp §a<nom>";
+    String permission = "atharion.deletewarp";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -32,22 +33,26 @@ public class SetWarpItemCommand implements CommandExecutor, TabCompleter
 
             try
             {
-                Connection connection = Main.getHikari().getConnection();
-                Statement statement = connection.createStatement();
 
-            if (((Player) sender).getInventory().getItemInMainHand().getType() == Material.AIR) { sender.sendMessage("§cVous devez tenir un objet en main."); return false; }
+                String location = LocationSerializer.serializeCenteredYP(((Player) sender).getLocation());
                 if (Warp.getByName(args[0]) == null)
                 {
-                    { sender.sendMessage("§cLe warp §e" + args[0] + "§c n'existe pas."); return false; }
+                    sender.sendMessage("§aLe warp §e" + args[0] + "§a n'existe pas.");
+                    return false;
                 }
                 else
                 {
-                   statement.executeUpdate("UPDATE Warps SET item = '" + ItemSerializer.serializeItem(((Player) sender).getInventory().getItemInMainHand()) + "' WHERE name = '" + Warp.getByName(args[0]).getName() + "'");
-                }
+                    Connection connection = Main.getHikari().getConnection();
+                    Statement statement = connection.createStatement();
 
-                statement.close();
-                connection.close();
-                sender.sendMessage("§e" + ((Player) sender).getDisplayName() + "§a vient de changer l'item du  warp §e" + args[0] + "§a.");
+
+                    statement.executeUpdate("DELETE FROM Warps WHERE name = '" + Warp.getByName(args[0]).getName() + "'");
+
+                    statement.close();
+                    connection.close();
+
+                }
+                sender.sendMessage("§aVous venez de supprimer le warp §e" + args[0] + "§a.");
 
                 Warp.loadWarps();
             }

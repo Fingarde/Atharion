@@ -43,7 +43,8 @@ public class CreateWarpCommand implements CommandExecutor
 
                 statement.close();
                 connection.close();
-                sender.sendMessage("§e" + ((Player) sender).getDisplayName() + "§a vient de créer le warp §e" + args[0] + "§a.");
+
+                sender.sendMessage("§aVous venez de créer le warp §e" + args[0] + "§a.");
 
                 Warp.loadWarps();
             }

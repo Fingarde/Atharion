@@ -50,12 +50,12 @@ public class SpawnCommand implements CommandExecutor, TabCompleter
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                sender.sendMessage("§aTeleportation de §e" + victim.getDisplayName() + "§a vers §espawn");
+                sender.sendMessage("§aTéléportation de §e" + victim.getDisplayName() + "§a vers §espawn");
                 victim.sendMessage("§e" + name + "§a vous a téléporté vers §espawn");
             }
             else
             {
-                sender.sendMessage("§aTeleportation vers §espawn");
+                sender.sendMessage("§aTéléportation vers §espawn");
             }
 
             return true;

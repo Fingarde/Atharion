@@ -77,11 +77,14 @@ public class ConnectionListerner implements Listener
                 }
             }
 
-            user.loadPermissions();
-            user.loadName();
-            user.loadNameInTab();
+            if(user.getBanTimestamp() == 0)
+            {
+                user.loadPermissions();
+                user.loadName();
+                user.loadNameInTab();
 
-            event.setJoinMessage(user.getDisplayName() + "§a a rejoint §e§lAtharion");
+                event.setJoinMessage(user.getDisplayName() + "§a a rejoint §e§lAtharion");
+            }
         }
         catch (SQLException e)
         {
@@ -96,7 +99,7 @@ public class ConnectionListerner implements Listener
 
         User user = User.getFromUUID(player.getUniqueId());
 
-        event.setQuitMessage(player.getDisplayName() + "§c a quitté §e§lAtharion");
+        event.setQuitMessage(user.getDisplayName() + "§c a quitté §e§lAtharion");
 
         User.users.remove(user);
     }

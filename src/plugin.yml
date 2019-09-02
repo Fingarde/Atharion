@@ -2,6 +2,7 @@ name: Atharion
 version: 1.0.0
 description: Custom plugin for Andagor's server called Atharion https://www.twitch.tv/andagor
 main: fr.fingarde.atharion.Main
+
 commands:
   s:
     description: Summon a player on you
@@ -28,7 +29,12 @@ commands:
   createwarp:
     aliases:
       - setwarp
+      - addwarp
     description: Create warp
+  deletewarp:
+    aliases:
+      - removewarp
+    description: Delete warp
   setwarpitem:
     description: Create warp
   warp:

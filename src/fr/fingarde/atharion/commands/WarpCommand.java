@@ -29,7 +29,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter
             if (!(sender instanceof Player)) { Error.onlyPlayer(sender); return false; }
             if (!sender.hasPermission(permission + "opengui") && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + ".opengui"); return false; }
 
-            ArrayList<Warp> warpsToAddInInv = new ArrayList<>();//
+            ArrayList<Warp> warpsToAddInInv = new ArrayList<>();
 
             for(Warp warp : Warp.warps)
             {
@@ -80,12 +80,12 @@ public class WarpCommand implements CommandExecutor, TabCompleter
             {
                 String name = (sender instanceof Player) ? ((Player) sender).getDisplayName() : sender.getName();
 
-                sender.sendMessage("§aTeleportation de §e" + victim.getDisplayName() + "§a vers §e" + Warp.getByName(args[0]).getName());
+                sender.sendMessage("§aTéléportation de §e" + victim.getDisplayName() + "§a vers §e" + Warp.getByName(args[0]).getName());
                 victim.sendMessage("§e" + name + "§a vous a téléporté vers §e" + Warp.getByName(args[0]).getName());
             }
             else
             {
-                sender.sendMessage("§aTeleportation vers §e" + Warp.getByName(args[0]).getName());
+                sender.sendMessage("§aTéléportation vers §e" + Warp.getByName(args[0]).getName());
             }
 
             return true;

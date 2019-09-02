@@ -69,7 +69,11 @@ public class BanCommand implements CommandExecutor, TabCompleter
                         unbanAt = new Date().getTime() + timeMute;
 
                         if(args.length == 2) { message = ""; }
-                        else { message = message.substring(args[1].length() + 1); }
+                        else
+                        {
+                            if (message.length() < args[1].length()) { message = ""; }
+                            else { message = message.substring(args[1].length() + 1); }
+                        }
                     }
                 }
 

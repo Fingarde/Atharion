@@ -4,6 +4,7 @@ import fr.fingarde.atharion.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scoreboard.Team;
 
 import java.sql.Connection;
@@ -197,6 +198,16 @@ public class User
 
     public void loadPermissions()
     {
+        if(!player.isOp())
+        {
+            PermissionAttachment removeAtachement = this.player.addAttachment(Main.getInstance());
+
+            for(PermissionAttachmentInfo s : player.getEffectivePermissions())
+            {
+                removeAtachement.setPermission(s.getPermission(), false);
+            }
+        }
+
         if (this.rank.getPermissions() != null)
         {
             PermissionAttachment attachment = this.player.addAttachment(Main.getInstance());
@@ -212,6 +223,7 @@ public class User
                 {
                     attachment.setPermission(permission, true);
                 }
+
             }
         }
     }
@@ -240,14 +252,14 @@ public class User
 
         noCollisionTeam.addEntry(this.player.getName());
 
-        this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7]" : "") + this.displayName);
+        this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7] " : "") + this.displayName);
     }
 
 
     public void loadName()
     {
         this.player.setDisplayName(this.player.getName());
-        if (this.nickname != "" && this.player.hasPermission("havenickname")) { this.player.setDisplayName(this.nickname); }
+        if (this.nickname != "" && this.player.hasPermission("atharion.havenickname")) { this.player.setDisplayName(this.nickname); }
 
         String localPrefix = "";
         String localSuffix = "";
@@ -255,8 +267,8 @@ public class User
         if (this.rank.getPrefix() != null) { localPrefix = this.rank.getPrefix() + " " + "§r"; }
         if (this.rank.getSuffix() != null) { localSuffix =  "§r" + " " + this.rank.getSuffix(); }
 
-        if (this.prefix != "" && this.player.hasPermission("haveprefix")) { localPrefix = ((this.prefix.length() == 2 && this.prefix.startsWith("§")) ? this.prefix : (this.prefix + " ")) + "§r"; }
-        if (this.suffix != "" && this.player.hasPermission("havesuffix")) { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
+        if (this.prefix != "" && this.player.hasPermission("atharion.haveprefix")) { localPrefix = ((this.prefix.length() == 2 && this.prefix.startsWith("§")) ? this.prefix : (this.prefix + " ")) + "§r"; }
+        if (this.suffix != "" && this.player.hasPermission("atharion.havesuffix")) { localSuffix =  "§r" + ((this.suffix.length() == 2 && this.prefix.startsWith("§")) ? this.suffix : (" " + this.suffix)); }
 
         this.displayName = localPrefix + player.getDisplayName() + localSuffix;
     }
