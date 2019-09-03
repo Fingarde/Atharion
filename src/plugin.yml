@@ -53,3 +53,7 @@ commands:
     description: Moderation command
   spawn:
     description: Teleport player to spawn
+  speed:
+      description: Change player speed
+  tp:
+    description: Teleport to player

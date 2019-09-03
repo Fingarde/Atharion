@@ -152,7 +152,6 @@ public class Main extends JavaPlugin
         getCommand("setwarpitem").setExecutor(new SetWarpItemCommand());
         getCommand("setwarpitem").setTabCompleter(new SetWarpItemCommand());
 
-
         getCommand("warp").setExecutor(new WarpCommand());
         getCommand("warp").setTabCompleter(new WarpCommand());
 
@@ -171,6 +170,11 @@ public class Main extends JavaPlugin
         getCommand("spawn").setExecutor(new SpawnCommand());
         getCommand("spawn").setTabCompleter(new SpawnCommand());
 
+        getCommand("speed").setExecutor(new SpeedCommand());
+        getCommand("speed").setTabCompleter(new SpeedCommand());
+
+        getCommand("tp").setExecutor(new TpCommand());
+        getCommand("tp").setTabCompleter(new TpCommand());
     }
 
     private void registerListeners()

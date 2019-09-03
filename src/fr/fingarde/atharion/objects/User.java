@@ -242,7 +242,7 @@ public class User
             team.addEntry(this.player.getName());
         }
 
-        try
+        /*try
         {
             Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("noCollision").setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
         }
@@ -250,7 +250,7 @@ public class User
 
         Team noCollisionTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("noCollision");
 
-        noCollisionTeam.addEntry(this.player.getName());
+        noCollisionTeam.addEntry(this.player.getName());*/
 
         this.player.setPlayerListName(((this.muteTimestamp > 0) ? "§7[§8Mute§7] " : "") + this.displayName);
     }
