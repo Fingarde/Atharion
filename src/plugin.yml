@@ -2,7 +2,8 @@ name: Atharion
 version: 1.0.0
 description: Custom plugin for Andagor's server called Atharion https://www.twitch.tv/andagor
 main: fr.fingarde.atharion.Main
-
+softdepend:
+  - Multiverse-Core
 commands:
   s:
     description: Summon a player on you

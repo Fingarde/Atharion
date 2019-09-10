@@ -46,6 +46,8 @@ public class SuffixCommand implements CommandExecutor, TabCompleter
                 suffix += " " + args[i];
             }
 
+            if(suffix == "") {  sender.sendMessage(usage); return false; }
+
             suffix = suffix.substring(1);
             suffix = suffix.replaceAll("&", "§");
 

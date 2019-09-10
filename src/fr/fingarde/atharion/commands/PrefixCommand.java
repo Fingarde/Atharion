@@ -45,6 +45,8 @@ public class PrefixCommand implements CommandExecutor, TabCompleter
                 prefix += " " + args[i];
             }
 
+            if(prefix == "") {  sender.sendMessage(usage); return false; }
+
             prefix = prefix.substring(1);
             prefix = prefix.replaceAll("&", "§");
 

@@ -4,6 +4,7 @@ import fr.fingarde.atharion.objects.Warp;
 import fr.fingarde.atharion.utils.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -56,10 +57,9 @@ public class WarpCommand implements CommandExecutor, TabCompleter
 
             if (!sender.hasPermission(permission + "." + args[0]) && !sender.hasPermission(permission + ".*") ) { Error.noPermission(sender, permission + "." + args[0].toLowerCase()); return false; }
 
-            Location location = Warp.getByName(args[0]).getLocation();
+            Warp destination = Warp.getByName(args[0]);
 
             Player victim = null;
-
 
             if(args.length == 2)
             {
@@ -74,7 +74,7 @@ public class WarpCommand implements CommandExecutor, TabCompleter
 
             if (victim != sender && !sender.hasPermission(permissionOther)) { Error.noPermission(sender, permissionOther); return false; }
 
-            victim.teleport(location);
+            victim.teleport(destination.getLocation());
 
             if (victim != sender)
             {

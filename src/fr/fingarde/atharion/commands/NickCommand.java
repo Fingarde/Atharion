@@ -1,7 +1,7 @@
 package fr.fingarde.atharion.commands;
 
-import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.objects.User;
+import fr.fingarde.atharion.utils.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -44,6 +44,8 @@ public class NickCommand implements CommandExecutor, TabCompleter
 
                 nick += " " + args[i];
             }
+
+            if(nick == "") {  sender.sendMessage(usage); return false; }
 
             nick = nick.substring(1);
             nick = nick.replaceAll("&", "§");

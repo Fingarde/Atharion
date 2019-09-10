@@ -39,6 +39,8 @@ public class Main extends JavaPlugin
         connectDatabase();
         createTables();
 
+        loadWorlds();
+
         registerCommands();
         registerListeners();
 
@@ -113,6 +115,10 @@ public class Main extends JavaPlugin
             console.sendMessage(ChatColor.GOLD + "[Atharion] INFO: Le plugin se désactive automatiquement.");
             Bukkit.getPluginManager().disablePlugin(this);
         }
+    }
+
+    private void loadWorlds()
+    {
     }
 
     private void registerCommands()
