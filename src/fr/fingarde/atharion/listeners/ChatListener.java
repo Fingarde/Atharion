@@ -1,5 +1,6 @@
 package fr.fingarde.atharion.listeners;
 
+import fr.fingarde.atharion.Main;
 import fr.fingarde.atharion.utils.Error;
 import fr.fingarde.atharion.objects.User;
 import fr.fingarde.atharion.utils.TimestampConverter;
@@ -74,5 +75,7 @@ public class ChatListener implements Listener
       {
           onlinePlayer.sendMessage(ChatColor.WHITE + user.getDisplayName() + "§r" + ChatColor.GOLD + " > " + ChatColor.WHITE + message);
       }
+
+        Main.getConsole().sendMessage(player.getName() + ": " + message);
     }
 }

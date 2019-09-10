@@ -15,16 +15,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-/*TODO
- BAN = TP DANS
- Prem pour parler
- Warps
- Ban in DB + WARNS
-
-
- */
-
 public class Main extends JavaPlugin
 {
     private static Main instance;
@@ -215,5 +205,10 @@ public class Main extends JavaPlugin
     public static Main getInstance()
     {
         return instance;
+    }
+
+    public static ConsoleCommandSender getConsole()
+    {
+        return console;
     }
 }
